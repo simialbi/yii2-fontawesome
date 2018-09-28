@@ -147,11 +147,11 @@ class Icon extends BaseObject
         Html::addCssClass($options, ['svg-inline--fa', 'fa-' . $this->iconName, $widthClass]);
 
         $options['aria-hidden'] = 'true';
-        $options['data'] = [
+        $options['data'] = ArrayHelper::merge(ArrayHelper::getValue($options, 'data', []), [
             'prefix' => $this->prefix,
             'icon' => $this->iconName,
             'fa-i2svg' => ''
-        ];
+        ]);
         $options['role'] = 'img';
         $options['xmlns'] = 'http://www.w3.org/2000/svg';
         $options['viewBox'] = implode(' ', ArrayHelper::getValue($_ref, 'viewBox', ['0', '0', $width, $height]));
@@ -165,7 +165,8 @@ class Icon extends BaseObject
         }
 
         if ($this->mask) {
-            $_ref2 = ArrayHelper::getValue($this->namespace, [$this->iconName, 'svg', $this->prefix]);
+            $prefix = ArrayHelper::getValue($this->prefixMapping, $this->prefix, 'solid');
+            $_ref2 = ArrayHelper::getValue($this->namespace, [$this->iconName, 'svg', $prefix]);
 
             $transform = $this->transformForSvg($this->transform, $width, ArrayHelper::getValue($_ref2, 'width'));
             $maskRect = [
@@ -228,8 +229,8 @@ class Icon extends BaseObject
             $options['children'][] = [
                 'tag' => 'rect',
                 'fill' => 'currentColor',
-                'clip-path' => 'url(#'.$clipId.')',
-                'mask' => 'url(#'.$maskId.')',
+                'clip-path' => 'url(#' . $clipId . ')',
+                'mask' => 'url(#' . $maskId . ')',
                 'x' => 0,
                 'y' => 0,
                 'width' => '100%',
@@ -391,7 +392,13 @@ class Icon extends BaseObject
                     $rotate = ArrayHelper::getValue($this->_transform, 'rotate', 0);
                     ArrayHelper::setValue($this->_transform, 'rotate', $rotate + $rest);
                     break;
+                default:
+                    continue 2;
             }
+
+            $dataFaTransform = explode(' ', ArrayHelper::getValue($this->options, 'data.fa-transform', ''));
+            $dataFaTransform[] = strtolower(trim($n));
+            ArrayHelper::setValue($this->options, 'data.fa-transform', trim(implode(' ', $dataFaTransform)));
         }
     }
 
@@ -417,11 +424,15 @@ class Icon extends BaseObject
             return;
         }
 
+        $mask[1] = preg_replace('#^fa-#', '', $mask[1]);
         if (ArrayHelper::keyExists($mask[1], $this->namespace, false)) {
             $this->_mask = new static([
                 'prefix' => $mask[0],
                 'iconName' => strtolower($mask[1])
             ]);
+
+            $mask[1] = 'fa-'.$mask[1];
+            ArrayHelper::setValue($this->options, 'data.fa-mask', trim(implode(' ', $mask)));
         }
     }
 
