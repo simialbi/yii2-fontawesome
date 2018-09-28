@@ -14,5 +14,10 @@ return [
         '@webroot' => $baseDir . '/runtime',
         '@vendor' => realpath($baseDir . '/../../vendor'),
         '@bower' => realpath($baseDir . '/../../vendor/bower'),
+    ],
+    'components' => [
+        'cache'        => [
+            'class' => 'yii\caching\DummyCache'
+        ]
     ]
 ];

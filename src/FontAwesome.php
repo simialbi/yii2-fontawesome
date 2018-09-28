@@ -16,75 +16,6 @@ use rmrevin\yii\fontawesome\component;
 class FontAwesome
 {
     /**
-     * CSS class prefix
-     * @var string
-     */
-    public static $cssPrefix = 'fa';
-
-    /**
-     * CSS class prefix
-     * @var string
-     */
-    public static $basePrefix = 'fa';
-
-    /**
-     * Creates an `Icon` component that can be used to FontAwesome html icon
-     *
-     * @param string $name
-     * @param array $options
-     * @return component\Icon
-     */
-    public static function icon($name, $options = [])
-    {
-        return new component\Icon(static::$cssPrefix, $name, $options);
-    }
-
-    /**
-     * Shortcut for `icon()` method
-     * @see icon()
-     *
-     * @param string $name
-     * @param array $options
-     * @return component\Icon
-     */
-    public static function i($name, $options = [])
-    {
-        return static::icon($name, $options);
-    }
-
-    /**
-     * Creates an `Stack` component that can be used to FontAwesome html icon
-     *
-     * @param array $options
-     * @return component\Stack
-     */
-    public static function stack($options = [])
-    {
-        return new component\Stack(static::$cssPrefix, $options);
-    }
-
-    /**
-     * Shortcut for `stack()` method
-     * @see stack()
-     *
-     * @param array $options
-     * @return component\Stack
-     */
-    public static function s($options = [])
-    {
-        return static::stack($options);
-    }
-
-    /**
-     * @param array $options
-     * @return component\UnorderedList
-     */
-    public static function ul($options = [])
-    {
-        return new component\UnorderedList(static::$cssPrefix, $options);
-    }
-
-    /**
      * Size values
      * @see component\Icon::size
      */
@@ -93,7 +24,6 @@ class FontAwesome
     const SIZE_3X = '3x';
     const SIZE_4X = '4x';
     const SIZE_5X = '5x';
-
     /**
      * Rotate values
      * @see component\Icon::rotate
@@ -101,14 +31,12 @@ class FontAwesome
     const ROTATE_90 = '90';
     const ROTATE_180 = '180';
     const ROTATE_270 = '270';
-
     /**
      * Flip values
      * @see component\Icon::flip
      */
     const FLIP_HORIZONTAL = 'horizontal';
     const FLIP_VERTICAL = 'vertical';
-
     /**
      * Icons name
      */
@@ -1223,4 +1151,75 @@ class FontAwesome
     const _YOAST = 'yoast';
     const _YOUTUBE = 'youtube';
     const _YOUTUBE_SQUARE = 'youtube-square';
+    /**
+     * CSS class prefix
+     * @var string
+     */
+    public static $cssPrefix = 'fa';
+    /**
+     * CSS class prefix
+     * @var string
+     */
+    public static $basePrefix = 'fa';
+
+    /**
+     * Shortcut for `icon()` method
+     * @see icon()
+     *
+     * @param string $name
+     * @param array $options
+     * @return component\Icon
+     */
+    public static function i($name, $options = [])
+    {
+        return static::icon($name, $options);
+    }
+
+    /**
+     * Creates an `Icon` component that can be used to FontAwesome html icon
+     *
+     * @param string $name
+     * @param array $options
+     * @return component\Icon
+     */
+    public static function icon($name, $options = [])
+    {
+        return new component\Icon([
+            'iconName' => $name,
+            'options' => $options,
+            'prefix' => static::$cssPrefix
+        ]);
+    }
+
+    /**
+     * Shortcut for `stack()` method
+     * @see stack()
+     *
+     * @param array $options
+     * @return component\Stack
+     */
+    public static function s($options = [])
+    {
+        return static::stack($options);
+    }
+
+    /**
+     * Creates an `Stack` component that can be used to FontAwesome html icon
+     *
+     * @param array $options
+     * @return component\Stack
+     */
+    public static function stack($options = [])
+    {
+        return new component\Stack(static::$cssPrefix, $options);
+    }
+
+    /**
+     * @param array $options
+     * @return component\UnorderedList
+     */
+    public static function ul($options = [])
+    {
+        return new component\UnorderedList(static::$cssPrefix, $options);
+    }
 }
