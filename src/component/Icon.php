@@ -58,6 +58,11 @@ class Icon extends BaseObject
     public $options = [];
 
     /**
+     * @var string Path to `icons.json`
+     */
+    public $sourcePath;
+
+    /**
      * @var array Font awesome icon namespace
      */
     private $_namespace;
@@ -113,6 +118,10 @@ class Icon extends BaseObject
         if (!isset($this->options['id'])) {
             $this->options['id'] = static::$autoIdPrefix . static::$counter++;
         }
+        if (empty($this->sourcePath)) {
+            $ds = DIRECTORY_SEPARATOR;
+            $this->sourcePath = __DIR__ . $ds . '..' . $ds . 'font-awesome' . $ds . 'metadata' . $ds . 'icons.json';
+        }
 
         AssetBundle::register(Yii::$app->view);
     }
@@ -135,7 +144,7 @@ class Icon extends BaseObject
             $_ref = ArrayHelper::getValue($this->namespace, [$this->iconName, 'svg', $prefix]);
         }
 
-//        var_dump($this->namespace[$this->iconName]['svg']);
+//        var_dump($this->namespace[$this->iconName]['svg']['solid']);
         if (!$_ref) {
             return '';
         }
@@ -306,12 +315,11 @@ class Icon extends BaseObject
     {
         if (!$this->_namespace) {
             $this->_namespace = Yii::$app->cache->getOrSet('fa-namespace', function () {
-                $json = Yii::getAlias('@vendor/fortawesome/font-awesome/advanced-options/metadata/icons.json');
-                if (!file_exists($json)) {
+                if (!file_exists($this->sourcePath)) {
                     return false;
                 }
 
-                $data = Json::decode(file_get_contents($json));
+                $data = Json::decode(file_get_contents($this->sourcePath));
 
                 return $data;
             });
@@ -431,7 +439,7 @@ class Icon extends BaseObject
                 'iconName' => strtolower($mask[1])
             ]);
 
-            $mask[1] = 'fa-'.$mask[1];
+            $mask[1] = 'fa-' . $mask[1];
             ArrayHelper::setValue($this->options, 'data.fa-mask', trim(implode(' ', $mask)));
         }
     }

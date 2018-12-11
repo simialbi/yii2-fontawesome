@@ -28,7 +28,6 @@
   ],
   "require": {
     "php": ">=5.4.0",
-    "fortawesome/font-awesome": "^5.3.1",
     "yiisoft/yii2": "^2.0.0"
   },
   "require-dev": {
@@ -54,18 +53,6 @@
     {
       "type": "composer",
       "url": "https://asset-packagist.org"
-    },
-    {
-      "type": "package",
-      "package": {
-        "name": "fortawesome/font-awesome",
-        "version": "5.5.0",
-        "source": {
-          "url": "https://github.com/FortAwesome/Font-Awesome.git",
-          "type": "git",
-          "reference": "5.5.0"
-        }
-      }
     }
   ]
 }
