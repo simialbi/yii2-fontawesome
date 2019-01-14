@@ -119,8 +119,7 @@ class Icon extends BaseObject
             $this->options['id'] = static::$autoIdPrefix . static::$counter++;
         }
         if (empty($this->sourcePath)) {
-            $ds = DIRECTORY_SEPARATOR;
-            $this->sourcePath = __DIR__ . $ds . '..' . $ds . 'font-awesome' . $ds . 'metadata' . $ds . 'icons.json';
+            $this->sourcePath = Yii::getAlias('@vendor/fortawesome/font-awesome/metadata/icons.json');
         }
 
         AssetBundle::register(Yii::$app->view);
