@@ -7,12 +7,12 @@
 
 namespace rmrevin\yii\fontawesome\component;
 
+use rmrevin\yii\fontawesome\AssetBundle;
 use Yii;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\web\AssetBundle;
 
 /**
  * Class Icon
