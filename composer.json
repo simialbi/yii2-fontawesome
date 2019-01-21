@@ -48,7 +48,7 @@
     }
   },
   "extra": {
-    "branch-alias": "3.3.x-dev"
+    "branch-alias": "3.0.x-dev"
   },
   "repositories": [
     {
