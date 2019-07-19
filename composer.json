@@ -27,15 +27,19 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0",
-    "yiisoft/yii2": "^2.0.0",
-    "fortawesome/font-awesome": "dev-master"
+    "php": ">=5.6.0",
+    "yiisoft/yii2": "^2.0.0"
   },
   "require-dev": {
     "doctrine/instantiator": "1.0.*",
     "phpdocumentor/reflection-docblock": "~3.1.0",
     "phpunit/phpunit": "^4.8",
-    "yiisoft/yii2-coding-standards": "~2.0"
+    "yiisoft/yii2-coding-standards": "~2.0",
+    "fortawesome/font-awesome-pro": "^5.9.0"
+  },
+  "suggest": {
+    "fortawesome/font-awesome": "Font awesome free",
+    "fortawesome/font-awesome-pro": "Font awesome pro"
   },
   "autoload": {
     "psr-4": {
@@ -48,12 +52,18 @@
     }
   },
   "extra": {
-    "branch-alias": "3.0.x-dev"
+    "branch-alias": {
+      "dev-master": "3.0.x-dev"
+    }
   },
   "repositories": [
     {
       "type": "composer",
       "url": "https://asset-packagist.org"
+    },
+    {
+      "type": "composer",
+      "url": "https://packagist.tonic.ag"
     }
   ]
 }
