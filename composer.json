@@ -41,6 +41,9 @@
     "fortawesome/font-awesome": "Font awesome free",
     "fortawesome/font-awesome-pro": "Font awesome pro"
   },
+  "replace": {
+    "rmrevin/yii2-fontawesome": "3.* | dev-master"
+  },
   "autoload": {
     "psr-4": {
       "rmrevin\\yii\\fontawesome\\": "src"
