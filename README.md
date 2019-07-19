@@ -25,7 +25,7 @@ Support
 
 Fontawesome version
 -------------------
-| Version of font | Version of extension |
+| Version of font-awesome | Version of extension |
 | ---:|:--- |
 | 4.* | ~2.17 |
 | 5.* | ~3.0 |
@@ -53,13 +53,13 @@ The preferred way to install this extension is through [composer](https://getcom
 Either run
 
 ```bash
-composer require "rmrevin/yii2-fontawesome:~3.2"
+composer require "rmrevin/yii2-fontawesome:~3.4"
 ```
 
 or add
 
 ```
-"rmrevin/yii2-fontawesome": "~3.2",
+"rmrevin/yii2-fontawesome": "~3.4",
 ```
 
 to the `require` section of your `composer.json` file.
@@ -120,6 +120,16 @@ Or inject `NpmProAssetBundle` in your view:
 rmrevin\yii\fontawesome\NpmProAssetBundle::register($this);
 ```
 
+### Optional
+
+In order for do not install the free version of the font-awesome package, you can add it to the `replace` section of `composer.json`.
+
+```
+  "replace": {
+    "fortawesome/font-awesome": "*"
+  },
+```
+
 Usage with fa free version
 -------------------------
 
@@ -144,17 +154,11 @@ Or inject `CdnFreeAssetBundle` in your view:
 rmrevin\yii\fontawesome\CdnFreeAssetBundle::register($this);
 ```
 
-### NPM
-Install npm package of font:
-```
-npm install @fortawesome/fontawesome-free
-```
-or 
-```
-yarn add @fortawesome/fontawesome-free
-```
+# Composer
 
-And add `NpmFreeAssetBundle` as depends of your app asset bundle:
+Free version of package `fortawesome/font-awesome` already installed in vendor.
+
+Add `NpmFreeAssetBundle` as depends of your app asset bundle:
 ```php
 class AppAsset extends AssetBundle
 {

@@ -15,7 +15,7 @@ class AssetBundle extends \yii\web\AssetBundle
     /**
      * {@inheritdoc}
      */
-    public $sourcePath = '@vendor/fortawesome/font-awesome';
+    public $sourcePath = '@vendor/fortawesome/font-awesome-pro';
 
     /**
      * {@inheritdoc}
