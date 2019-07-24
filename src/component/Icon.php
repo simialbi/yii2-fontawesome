@@ -34,7 +34,7 @@ class Icon extends BaseObject
      * @var string the prefix to the automatically generated icon IDs.
      * @see getId()
      */
-    public static $autoIdPrefix = 'i';
+    public static $autoIdPrefix = 'fa';
 
     /**
      * @var string    Style Prefix. One of fas, far, fal, fab. Defaults to fas
