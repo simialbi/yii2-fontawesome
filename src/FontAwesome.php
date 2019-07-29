@@ -1498,7 +1498,10 @@ class FontAwesome
      */
     public static function stack($options = [])
     {
-        return new component\Stack(static::$cssPrefix, $options);
+        return new component\Stack([
+            'prefix' => static::$cssPrefix,
+            'options' => $options
+        ]);
     }
 
     /**
