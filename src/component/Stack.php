@@ -59,7 +59,7 @@ class Stack extends BaseObject
 
         $iconBack = '';
         if ($this->_icon_back instanceof Icon) {
-            Html::addCssClass($this->_icon_back->options, FontAwesome::$basePrefix . '-stack-2x');
+            Html::addCssClass($this->_icon_back->options, FontAwesome::$cssPrefix . '-stack-2x');
             $iconBack = $this->_icon_back;
         }
         if ($this->_text_front !== null) {
@@ -67,8 +67,8 @@ class Stack extends BaseObject
         } else {
             if ($this->_icon_front instanceof Icon) {
                 Html::addCssClass($this->_icon_front->options, [
-                    FontAwesome::$basePrefix . '-stack-1x',
-                    FontAwesome::$basePrefix . '-inverse'
+                    FontAwesome::$cssPrefix . '-stack-1x',
+                    FontAwesome::$cssPrefix . '-inverse'
                 ]);
             }
             $contentFront = $this->_icon_front;
@@ -108,7 +108,7 @@ class Stack extends BaseObject
     {
         $tag = ArrayHelper::remove($options, 'tag', 'span');
 
-        Html::addCssClass($options, FontAwesome::$basePrefix . '-stack-1x');
+        Html::addCssClass($options, FontAwesome::$cssPrefix . '-stack-1x');
 
         $this->_text_front = Html::tag($tag, $text, $options);
 

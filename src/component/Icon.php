@@ -8,6 +8,7 @@
 namespace rmrevin\yii\fontawesome\component;
 
 use rmrevin\yii\fontawesome\AssetBundle;
+use rmrevin\yii\fontawesome\FontAwesome;
 use Yii;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
@@ -102,10 +103,11 @@ class Icon extends BaseObject
     /**
      * @var array map prefix to json meta data name
      */
-    private $prefixMapping = [
+    private $_prefixMapping = [
         'fas' => 'solid',
         'far' => 'regular',
         'fal' => 'light',
+        'fad' => 'duotone',
         'fab' => 'brands'
     ];
 
@@ -119,7 +121,15 @@ class Icon extends BaseObject
             $this->options['id'] = static::$autoIdPrefix . static::$counter++;
         }
         if (empty($this->sourcePath)) {
-            $this->sourcePath = Yii::getAlias('@vendor/fortawesome/font-awesome-pro/metadata/icons.json');
+            $location = Yii::getAlias('@vendor/fortawesome/font-awesome-pro/metadata/icons.json');
+            if (file_exists($location)) {
+                $this->sourcePath = $location;
+            } else {
+                $location = Yii::getAlias('@vendor/fortawesome/font-awesome/metadata/icons.json');
+                if (file_exists($location)) {
+                    $this->sourcePath = $location;
+                }
+            }
         }
 
         AssetBundle::register(Yii::$app->view);
@@ -136,10 +146,10 @@ class Icon extends BaseObject
         $id = ArrayHelper::getValue($options, 'id', '');
 
         if ($this->mask) {
-            $prefix = ArrayHelper::getValue($this->prefixMapping, $this->mask->prefix, 'solid');
+            $prefix = ArrayHelper::getValue($this->_prefixMapping, $this->mask->prefix, 'solid');
             $_ref = ArrayHelper::getValue($this->namespace, [$this->mask->iconName, 'svg', $prefix]);
         } else {
-            $prefix = ArrayHelper::getValue($this->prefixMapping, $this->prefix, 'solid');
+            $prefix = ArrayHelper::getValue($this->_prefixMapping, $this->prefix, 'solid');
             $_ref = ArrayHelper::getValue($this->namespace, [$this->iconName, 'svg', $prefix]);
         }
 
@@ -173,7 +183,7 @@ class Icon extends BaseObject
         }
 
         if ($this->mask) {
-            $prefix = ArrayHelper::getValue($this->prefixMapping, $this->prefix, 'solid');
+            $prefix = ArrayHelper::getValue($this->_prefixMapping, $this->prefix, 'solid');
             $_ref2 = ArrayHelper::getValue($this->namespace, [$this->iconName, 'svg', $prefix]);
 
             $transform = $this->transformForSvg($this->transform, $width, ArrayHelper::getValue($_ref2, 'width'));
@@ -267,12 +277,7 @@ class Icon extends BaseObject
                     ]
                 ];
             } else {
-                $options['children'][] = [
-                    'tag' => 'path',
-                    'fill' => 'currentColor',
-                    'content' => '',
-                    'd' => ArrayHelper::getValue($_ref, 'path')
-                ];
+                $options['children'][] = $this->asFoundIcon($_ref);
             }
         }
 
@@ -559,5 +564,44 @@ class Icon extends BaseObject
             ]),
             'path' => 'translate(' . ($iconWidth / -2) . ' -256)'
         ];
+    }
+
+    /**
+     * @param array $icon
+     * @return array
+     */
+    private function asFoundIcon($icon)
+    {
+        $vectorData = ArrayHelper::getValue($icon, 'path');
+
+        if (is_array($vectorData)) {
+            $element = [
+                'tag' => 'g',
+                'class' => FontAwesome::$cssPrefix . '-group',
+                'children' => [
+                    [
+                        'tag' => 'path',
+                        'class' => FontAwesome::$cssPrefix . '-secondary',
+                        'fill' => 'currentColor',
+                        'd' => ArrayHelper::getValue($vectorData, 0)
+                    ],
+                    [
+                        'tag' => 'path',
+                        'class' => FontAwesome::$cssPrefix . '-primary',
+                        'fill' => 'currentColor',
+                        'd' => ArrayHelper::getValue($vectorData, 1)
+                    ]
+                ]
+            ];
+        } else {
+            $element = [
+                'tag' => 'path',
+                'fill' => 'currentColor',
+                'content' => '',
+                'd' => $vectorData
+            ];
+        }
+
+        return $element;
     }
 }
