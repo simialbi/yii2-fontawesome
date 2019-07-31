@@ -23,4 +23,13 @@ class AssetBundle extends \yii\web\AssetBundle
     public $css = [
         'css/svg-with-js.min.css'
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $publishOptions = [
+        'only' => [
+            'css/*'
+        ]
+    ];
 }
