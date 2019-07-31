@@ -38,6 +38,11 @@ class Icon extends BaseObject
     public static $autoIdPrefix = 'fa';
 
     /**
+     * @var array
+     */
+    private static $_rendered = [];
+
+    /**
      * @var string    Style Prefix. One of fas, far, fal, fab. Defaults to fas
      */
     public $prefix = 'fas';
@@ -142,6 +147,20 @@ class Icon extends BaseObject
     {
         $options = $this->options;
         $options['children'] = [];
+        $toHash = $this->prefix . $this->iconName . serialize($this->transform);
+        if ($this->mask) {
+            $toHash .= $this->mask->iconName . $this->mask->prefix . serialize($this->mask->transform);
+        }
+        $hash = md5($toHash);
+
+        if (isset(static::$_rendered[$hash])) {
+            return Html::tag('svg', Html::tag('use', '', [
+                'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
+                'xlink:href' => '#' . static::$_rendered[$hash]['id']
+            ]), [
+                'class' => static::$_rendered[$hash]['class']
+            ]);
+        }
 
         $id = ArrayHelper::getValue($options, 'id', '');
 
@@ -153,7 +172,6 @@ class Icon extends BaseObject
             $_ref = ArrayHelper::getValue($this->namespace, [$this->iconName, 'svg', $prefix]);
         }
 
-//        var_dump($this->namespace[$this->iconName]['svg']['solid']);
         if (!$_ref) {
             return '';
         }
@@ -162,7 +180,11 @@ class Icon extends BaseObject
         $height = ArrayHelper::getValue($_ref, 'height');
 
         $widthClass = 'fa-w-' . ceil($width / $height * 16);
-        Html::addCssClass($options, ['svg-inline--fa', 'fa-' . $this->iconName, $widthClass]);
+        static::$_rendered[$hash] = [
+            'id' => $id,
+            'class' => ['svg-inline--fa', 'fa-' . $this->iconName, $widthClass]
+        ];
+        Html::addCssClass($options, static::$_rendered[$hash]['class']);
 
         $options['aria-hidden'] = 'true';
         $options['data'] = ArrayHelper::merge(ArrayHelper::getValue($options, 'data', []), [
@@ -281,7 +303,32 @@ class Icon extends BaseObject
             }
         }
 
-        return $this->render($options);
+        static::$_rendered[$hash] = [
+            'class' => $options['class'],
+            'id' => $id
+        ];
+
+        $html = Html::beginTag('div', [
+            'style' => [
+                'visibility' => 'hidden',
+                'position' => 'absolute',
+                'width' => 0,
+                'height' => 0
+            ]
+        ]);
+        Html::removeCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
+        $html .= $this->render($options);
+        $html .= Html::endTag('div');
+        Html::addCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
+
+        $html .= Html::tag('svg', Html::tag('use', '', [
+            'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
+            'xlink:href' => '#' . static::$_rendered[$hash]['id']
+        ]), [
+            'class' => $options['class']
+        ]);
+
+        return $html; //$this->render($options);
     }
 
     /**
