@@ -153,7 +153,7 @@ class Icon extends BaseObject
         }
         $hash = md5($toHash);
 
-        if (isset(static::$_rendered[$hash])) {
+        if (!Yii::$app->request->isAjax && isset(static::$_rendered[$hash])) {
             return Html::tag('svg', Html::tag('use', '', [
                 'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
                 'xlink:href' => '#' . static::$_rendered[$hash]['id']
@@ -308,25 +308,31 @@ class Icon extends BaseObject
             'id' => $id
         ];
 
-        $html = Html::beginTag('div', [
-            'style' => [
-                'visibility' => 'hidden',
-                'position' => 'absolute',
-                'width' => 0,
-                'height' => 0
-            ]
-        ]);
-        Html::removeCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
+        if (!Yii::$app->request->isAjax) {
+            $html = Html::beginTag('div', [
+                'style' => [
+                    'visibility' => 'hidden',
+                    'position' => 'absolute',
+                    'width' => 0,
+                    'height' => 0
+                ]
+            ]);
+            Html::removeCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
+        } else {
+            $html = '';
+        }
         $html .= $this->render($options);
-        $html .= Html::endTag('div');
-        Html::addCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
+        if (!Yii::$app->request->isAjax) {
+            $html .= Html::endTag('div');
+            Html::addCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
 
-        $html .= Html::tag('svg', Html::tag('use', '', [
-            'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
-            'xlink:href' => '#' . static::$_rendered[$hash]['id']
-        ]), [
-            'class' => $options['class']
-        ]);
+            $html .= Html::tag('svg', Html::tag('use', '', [
+                'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
+                'xlink:href' => '#' . static::$_rendered[$hash]['id']
+            ]), [
+                'class' => $options['class']
+            ]);
+        }
 
         return $html; //$this->render($options);
     }
