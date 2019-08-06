@@ -25,7 +25,6 @@ use yii\helpers\Json;
  */
 class Icon extends BaseObject
 {
-
     /**
      * @var int a counter used to generate [[id]] for icons.
      * @internal
@@ -153,13 +152,18 @@ class Icon extends BaseObject
         }
         $hash = md5($toHash);
 
-        if (!Yii::$app->request->isAjax && isset(static::$_rendered[$hash])) {
-            return Html::tag('svg', Html::tag('use', '', [
-                'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
-                'xlink:href' => '#' . static::$_rendered[$hash]['id']
-            ]), [
-                'class' => static::$_rendered[$hash]['class']
-            ]);
+        if (isset(static::$_rendered[$hash])) {
+            $class = '';
+            if (isset($options['class'])) {
+                $class = (is_array($options['class']))
+                    ? implode(' ', $options['class'])
+                    : $options['class'];
+            }
+            return preg_replace(
+                '#^<svg([^>]*)class="([^"]+)"#',
+                '<svg$1class="$2 ' . $class . '"',
+                static::$_rendered[$hash]
+            );
         }
 
         $id = ArrayHelper::getValue($options, 'id', '');
@@ -303,38 +307,19 @@ class Icon extends BaseObject
             }
         }
 
-        static::$_rendered[$hash] = [
-            'class' => $options['class'],
-            'id' => $id
-        ];
+        Html::removeCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
+        static::$_rendered[$hash] = $this->render($options);
+        Html::addCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
 
-        if (!Yii::$app->request->isAjax) {
-            $html = Html::beginTag('div', [
-                'style' => [
-                    'visibility' => 'hidden',
-                    'position' => 'absolute',
-                    'width' => 0,
-                    'height' => 0
-                ]
-            ]);
-            Html::removeCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
-        } else {
-            $html = '';
-        }
-        $html .= $this->render($options);
-        if (!Yii::$app->request->isAjax) {
-            $html .= Html::endTag('div');
-            Html::addCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
+        $class = (is_array($options['class']))
+            ? implode(' ', $options['class'])
+            : $options['class'];
 
-            $html .= Html::tag('svg', Html::tag('use', '', [
-                'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
-                'xlink:href' => '#' . static::$_rendered[$hash]['id']
-            ]), [
-                'class' => $options['class']
-            ]);
-        }
-
-        return $html; //$this->render($options);
+        return preg_replace(
+            '#^<svg([^>]*)class="([^"]+)"#',
+            '<svg$1class="' . $class . '"',
+            static::$_rendered[$hash]
+        );
     }
 
     /**
