@@ -13,19 +13,19 @@ namespace rmrevin\yii\fontawesome;
 class AssetBundle extends \yii\web\AssetBundle
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $sourcePath = '@vendor/fortawesome/font-awesome-pro';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $css = [
         'css/svg-with-js.min.css'
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public $publishOptions = [
         'only' => [
