@@ -6,6 +6,8 @@
 
 namespace rmrevin\yii\fontawesome;
 
+use Yii;
+
 /**
  * Class AssetBundle
  * @package rmrevin\yii\fontawesome
@@ -38,7 +40,7 @@ class AssetBundle extends \yii\web\AssetBundle
      */
     public function init()
     {
-        if (!is_dir($this->sourcePath)) {
+        if (!is_dir(Yii::getAlias($this->sourcePath))) {
             $this->sourcePath = '@vendor/fortawesome/font-awesome';
         }
 
