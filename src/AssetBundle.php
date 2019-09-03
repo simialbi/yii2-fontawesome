@@ -17,7 +17,7 @@ class AssetBundle extends \yii\web\AssetBundle
     /**
      * {@inheritDoc}
      */
-    public $sourcePath = '@vendor/fortawesome/font-awesome-pro';
+    public $sourcePath = '@vendor/fortawesome/font-awesome';
 
     /**
      * {@inheritDoc}
@@ -40,8 +40,8 @@ class AssetBundle extends \yii\web\AssetBundle
      */
     public function init()
     {
-        if (!is_dir(Yii::getAlias($this->sourcePath))) {
-            $this->sourcePath = '@vendor/fortawesome/font-awesome';
+        if (is_dir(Yii::getAlias('@vendor/fortawesome/font-awesome-pro'))) {
+            $this->sourcePath = '@vendor/fortawesome/font-awesome-pro';
         }
 
         parent::init();
