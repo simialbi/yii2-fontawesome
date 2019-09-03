@@ -32,4 +32,16 @@ class AssetBundle extends \yii\web\AssetBundle
             'css/*'
         ]
     ];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function init()
+    {
+        if (!is_dir($this->sourcePath)) {
+            $this->sourcePath = '@vendor/fortawesome/font-awesome';
+        }
+
+        parent::init();
+    }
 }
