@@ -172,8 +172,8 @@ class Icon extends BaseObject
             $class = '';
             if (isset($options['class'])) {
                 $class = (is_array($options['class']))
-                    ? implode(' ', $options['class'])
-                    : $options['class'];
+                    ? trim(implode(' ', $options['class']))
+                    : trim($options['class']);
             }
             return preg_replace(
                 '#^<svg([^>]*)class="([^"]+)"#',
