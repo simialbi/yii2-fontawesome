@@ -32,8 +32,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.21",
-        "yiisoft/yii2-coding-standards": "~2.0",
-        "fortawesome/font-awesome-pro": "^5.10.0"
+        "yiisoft/yii2-coding-standards": "~2.0"
     },
     "suggest": {
         "fortawesome/font-awesome": "Font awesome free",
@@ -61,10 +60,6 @@
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
-        },
-        {
-            "type": "composer",
-            "url": "https://packagist.tonic.ag"
         }
     ],
     "config": {
