@@ -47,7 +47,7 @@ class Stack extends BaseObject
      * @return string
      * @throws \yii\base\InvalidConfigException
      */
-    public function __toString()
+    public function __toString(): string
     {
         $options = $this->options;
 
@@ -84,7 +84,7 @@ class Stack extends BaseObject
      * @param array $options
      * @return \rmrevin\yii\fontawesome\component\Stack
      */
-    public function icon($icon, $options = [])
+    public function icon($icon, array $options = []): Stack
     {
         if (is_string($icon)) {
             $icon = new Icon([
@@ -104,7 +104,7 @@ class Stack extends BaseObject
      * @param array $options
      * @return \rmrevin\yii\fontawesome\component\Stack
      */
-    public function text($text = '', $options = [])
+    public function text(string $text = '', array $options = []): Stack
     {
         $tag = ArrayHelper::remove($options, 'tag', 'span');
 
@@ -120,7 +120,7 @@ class Stack extends BaseObject
      * @param array $options
      * @return \rmrevin\yii\fontawesome\component\Stack
      */
-    public function on($icon, $options = [])
+    public function on($icon, array $options = []): Stack
     {
         if (is_string($icon)) {
             $icon = new Icon([

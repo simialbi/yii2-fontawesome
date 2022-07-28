@@ -14,15 +14,15 @@ use yii\helpers\ArrayHelper;
  * @package rmrevin\yii\fontawesome\tests\unit
  * This is the base class for all yii framework unit tests.
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
     public static $params;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->mock_application();
+        $this->mockWebApplication();
     }
 
     /**
@@ -30,10 +30,10 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * The application will be destroyed on tearDown() automatically.
      * @param string $appClass
      */
-    protected function mock_application($appClass = '\yii\console\Application')
+    protected function mockWebApplication(string $appClass = '\yii\console\Application')
     {
         // for update self::$params
-        $this->get_param('id');
+        $this->getParam('id');
 
         /** @var \yii\console\Application $app */
         new $appClass(self::$params);
@@ -45,7 +45,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * @param mixed $default default value to use when param is not set.
      * @return mixed the value of the configuration param
      */
-    public function get_param($name, $default = null)
+    public function getParam(string $name, $default = null)
     {
         if (self::$params === null) {
             self::$params = require(__DIR__ . '/config/main.php');
@@ -55,18 +55,13 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             }
         }
 
-        return isset(self::$params[$name]) ? self::$params[$name] : $default;
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
+        return self::$params[$name] ?? $default;
     }
 
     /**
      * Destroys application in Yii::$app by setting it to null.
      */
-    protected function destroy_application()
+    protected function destroyWebApplication()
     {
         \Yii::$app = null;
     }

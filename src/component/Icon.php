@@ -11,6 +11,8 @@ use rmrevin\yii\fontawesome\AssetBundle;
 use rmrevin\yii\fontawesome\FontAwesome;
 use Yii;
 use yii\base\BaseObject;
+use yii\caching\CacheInterface;
+use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -66,6 +68,17 @@ class Icon extends BaseObject
      * @var string Path to `icons.json`
      */
     public $sourcePath;
+
+    /**
+     * @var CacheInterface|array|string the cache used to improve RBAC performance. This can be one of the following:
+     *
+     * - an application component ID (e.g. `cache`)
+     * - a configuration array
+     * - a [[\yii\caching\Cache]] object
+     *
+     * When this is not set, it means caching is not enabled.
+     */
+    public $cache = 'cache';
 
     /**
      * @var array Font awesome icon namespace
@@ -124,6 +137,9 @@ class Icon extends BaseObject
         if (!isset($this->options['id'])) {
             $this->options['id'] = static::$autoIdPrefix . static::$counter++;
         }
+        if (!empty($this->cache)) {
+            $this->cache = Instance::ensure($this->cache, CacheInterface::class);
+        }
         if (empty($this->sourcePath)) {
             $location = Yii::getAlias('@vendor/fortawesome/font-awesome-pro/metadata/icons.json');
             if (file_exists($location)) {
@@ -142,7 +158,7 @@ class Icon extends BaseObject
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $options = $this->options;
         $options['children'] = [];
@@ -326,7 +342,7 @@ class Icon extends BaseObject
      * @param array $options
      * @return string
      */
-    protected function render(array $options)
+    protected function render(array $options): string
     {
         $tag = ArrayHelper::remove($options, 'tag', 'svg');
         $children = ArrayHelper::remove($options, 'children', []);
@@ -351,20 +367,27 @@ class Icon extends BaseObject
     }
 
     /**
-     * @return array
+     * @return array|false
      */
     public function getNamespace()
     {
         if (!$this->_namespace) {
-            $this->_namespace = Yii::$app->cache->getOrSet('fa-namespace', function () {
+            if ($this->cache) {
+                $this->_namespace = $this->cache->getOrSet('fa-namespace', function () {
+                    if (!file_exists($this->sourcePath)) {
+                        return false;
+                    }
+
+                    $data = Json::decode(file_get_contents($this->sourcePath));
+
+                    return $data;
+                });
+            } else {
                 if (!file_exists($this->sourcePath)) {
                     return false;
                 }
-
-                $data = Json::decode(file_get_contents($this->sourcePath));
-
-                return $data;
-            });
+                $this->_namespace = Json::decode(file_get_contents($this->sourcePath));
+            }
         }
 
         return $this->_namespace;
@@ -373,7 +396,7 @@ class Icon extends BaseObject
     /**
      * @return array
      */
-    public function getTransform()
+    public function getTransform(): array
     {
         return $this->_transform;
     }
@@ -455,7 +478,7 @@ class Icon extends BaseObject
     /**
      * @return static|null
      */
-    public function getMask()
+    public function getMask(): ?Icon
     {
         return $this->_mask;
     }
@@ -490,7 +513,7 @@ class Icon extends BaseObject
     /**
      * @return static
      */
-    public function inverse()
+    public function inverse(): Icon
     {
         Html::addCssClass($this->options, 'fa-inverse');
         return $this;
@@ -499,7 +522,7 @@ class Icon extends BaseObject
     /**
      * @return static
      */
-    public function spin()
+    public function spin(): Icon
     {
         Html::addCssClass($this->options, 'fa-spin');
         return $this;
@@ -508,7 +531,7 @@ class Icon extends BaseObject
     /**
      * @return static
      */
-    public function pulse()
+    public function pulse(): Icon
     {
         Html::addCssClass($this->options, 'fa-pulse');
         return $this;
@@ -517,7 +540,7 @@ class Icon extends BaseObject
     /**
      * @return static
      */
-    public function fixedWidth()
+    public function fixedWidth(): Icon
     {
         Html::addCssClass($this->options, 'fa-fw');
         return $this;
@@ -526,7 +549,7 @@ class Icon extends BaseObject
     /**
      * @return static
      */
-    public function border()
+    public function border(): Icon
     {
         Html::addCssClass($this->options, 'fa-border');
         return $this;
@@ -535,7 +558,7 @@ class Icon extends BaseObject
     /**
      * @return static
      */
-    public function pullLeft()
+    public function pullLeft(): Icon
     {
         Html::addCssClass($this->options, 'fa-pull-left');
         return $this;
@@ -544,7 +567,7 @@ class Icon extends BaseObject
     /**
      * @return static
      */
-    public function pullRight()
+    public function pullRight(): Icon
     {
         Html::addCssClass($this->options, 'fa-pull-right');
         return $this;
@@ -554,7 +577,7 @@ class Icon extends BaseObject
      * @param array|string $transformation
      * @return static
      */
-    public function transform($transformation)
+    public function transform($transformation): Icon
     {
         $this->transform = $transformation;
 
@@ -565,7 +588,7 @@ class Icon extends BaseObject
      * @param array|string $mask
      * @return static
      */
-    public function mask($mask)
+    public function mask($mask): Icon
     {
         $this->mask = $mask;
 
@@ -578,7 +601,7 @@ class Icon extends BaseObject
      * @param array $transform Transformation to check
      * @return boolean True if transformation makes sense
      */
-    private function transformIsMeaningful(array $transform)
+    private function transformIsMeaningful(array $transform): bool
     {
         return $transform != $this->_meaninglessTransform;
     }
@@ -591,7 +614,7 @@ class Icon extends BaseObject
      * @param integer $iconWidth Width of inner container (icon itself)
      * @return array
      */
-    private function transformForSvg(array $transform, $containerWidth, $iconWidth)
+    private function transformForSvg(array $transform, int $containerWidth, int $iconWidth): array
     {
         return [
             'outer' => 'translate(' . ($containerWidth / 2) . ' 256)',
@@ -608,7 +631,7 @@ class Icon extends BaseObject
      * @param array $icon
      * @return array
      */
-    private function asFoundIcon($icon)
+    private function asFoundIcon(array $icon): array
     {
         $vectorData = ArrayHelper::getValue($icon, 'path');
 

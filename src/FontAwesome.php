@@ -2140,13 +2140,13 @@ class FontAwesome
 
     /**
      * Shortcut for `icon()` method
-     * @see icon()
-     *
      * @param string $name
      * @param array $options
      * @return component\Icon
+     *@see icon()
+     *
      */
-    public static function i($name, $options = [])
+    public static function i(string $name, array $options = []): component\Icon
     {
         return static::icon($name, $options);
     }
@@ -2158,7 +2158,7 @@ class FontAwesome
      * @param array $options
      * @return component\Icon
      */
-    public static function icon($name, $options = [])
+    public static function icon(string $name, array $options = []): component\Icon
     {
         return new component\Icon([
             'iconName' => $name,
@@ -2174,7 +2174,7 @@ class FontAwesome
      * @param array $options
      * @return component\Stack
      */
-    public static function s($options = [])
+    public static function s(array $options = []): component\Stack
     {
         return static::stack($options);
     }
@@ -2185,7 +2185,7 @@ class FontAwesome
      * @param array $options
      * @return component\Stack
      */
-    public static function stack($options = [])
+    public static function stack(array $options = []): component\Stack
     {
         return new component\Stack([
             'prefix' => static::$cssPrefix,
