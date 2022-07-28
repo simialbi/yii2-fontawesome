@@ -168,12 +168,14 @@ class Icon extends BaseObject
         }
         $hash = md5($toHash);
 
+//        var_dump($options); exit;
+
         if (isset(static::$_rendered[$hash])) {
             $class = '';
             if (isset($options['class'])) {
                 $class = (is_array($options['class']))
-                    ? trim(implode(' ', $options['class']))
-                    : trim($options['class']);
+                    ? implode(' ', $options['class'])
+                    : $options['class'];
             }
             return preg_replace(
                 '#^<svg([^>]*)class="([^"]+)"#',
@@ -328,8 +330,8 @@ class Icon extends BaseObject
         Html::addCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
 
         $class = (is_array($options['class']))
-            ? trim(implode(' ', $options['class']))
-            : trim($options['class']);
+            ? implode(' ', $options['class'])
+            : $options['class'];
 
         return preg_replace(
             '#^<svg([^>]*)class="([^"]+)"#',
