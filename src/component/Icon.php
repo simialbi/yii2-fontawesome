@@ -328,8 +328,8 @@ class Icon extends BaseObject
         Html::addCssClass($options, ArrayHelper::getValue($this->options, 'class', []));
 
         $class = (is_array($options['class']))
-            ? implode(' ', $options['class'])
-            : $options['class'];
+            ? trim(implode(' ', $options['class']))
+            : trim($options['class']);
 
         return preg_replace(
             '#^<svg([^>]*)class="([^"]+)"#',

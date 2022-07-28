@@ -48,7 +48,7 @@ class MainTest extends TestCase
     {
         $dir = Yii::getAlias('@vendor/fortawesome/font-awesome-pro');
         if (!is_dir($dir)) {
-            $this->markTestSkipped();
+            $this->markTestSkipped('Font awesome pro not present');
         }
         Icon::$counter = 0;
 
