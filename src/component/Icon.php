@@ -70,7 +70,7 @@ class Icon extends BaseObject
     public $sourcePath;
 
     /**
-     * @var CacheInterface|array|string the cache used to improve RBAC performance. This can be one of the following:
+     * @var CacheInterface|array|string the cache used to improve performance. This can be one of the following:
      *
      * - an application component ID (e.g. `cache`)
      * - a configuration array
@@ -157,6 +157,7 @@ class Icon extends BaseObject
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function __toString(): string
     {
@@ -167,8 +168,6 @@ class Icon extends BaseObject
             $toHash .= $this->mask->iconName . $this->mask->prefix . serialize($this->mask->transform);
         }
         $hash = md5($toHash);
-
-//        var_dump($options); exit;
 
         if (isset(static::$_rendered[$hash])) {
             $class = '';
