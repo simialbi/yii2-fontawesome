@@ -15,14 +15,16 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 /**
- * Class Icon
- * @package rmrevin\yii\fontawesome\component
+ * This class represents a FontAwesome icon component, offering various configurations,
+ * including style prefixes, animations, transformations, and rendering as an SVG element.
  *
- * @property array $transform
+ * The Icon component adheres to the FontAwesome library's structure and conventions,
+ * and integrates with Yii's rendering mechanisms for seamless inclusion in web applications.
+ * It supports numerous customization options such as spinning, flipping, pulsing,
+ * size adjustment, and alignment, allowing for dynamic and visually appealing icons.
+ *
  * @property bool $sharp
  * @property bool $duotone
- * @property static|null $mask
- * @property-read array $namespace
  */
 class Icon extends Component
 {
@@ -53,42 +55,125 @@ class Icon extends Component
      */
     public array $options = [];
 
+    /**
+     * @var bool Indicates whether the icon should be displayed in sharp style.
+     *  When enabled, 's-' will be added to the prefix.
+     */
     private bool $_sharp = false;
 
+    /**
+     * @var bool Indicates whether the icon should be displayed in duotone style.
+     *  When enabled, 'd-' will be added to the prefix.
+     */
     private bool $_duotone = false;
 
+    /**
+     * @var bool Indicates whether the icon should be displayed with inverted color.
+     *  When enabled, the CSS class 'fa-inverse' will be added.
+     */
+    private bool $_inverse = false;
+
+    /**
+     * @var bool Indicates whether the icon should perform a 360° rotation clockwise.
+     *  When enabled, the CSS class 'fa-spin' will be added.
+     * @see https://docs.fontawesome.com/web/style/animate
+     */
     private bool $_spin = false;
 
+    /**
+     * @var bool Indicates whether the icon should perform a 360° rotation clockwise in 8 incremental steps.
+     *  When enabled, the CSS class 'fa-pulse' will be added.
+     * @see https://docs.fontawesome.com/web/style/animate
+     */
     private bool $_pulse = false;
 
+    /**
+     * @var bool Indicates whether the rotation of the icon should be in reverse direction (counter-clockwise).
+     *  Used in combination with $_spin or $_pulse and adds the CSS class 'fa-spin-reverse'.
+     */
     private bool $_reverse = false;
 
+    /**
+     * @var bool Indicates whether the icon should be animated with a pulsing heartbeat effect.
+     *  When enabled, the CSS class 'fa-beat' will be added.
+     * @see https://docs.fontawesome.com/web/style/animate
+     */
     private bool $_beat = false;
 
+    /**
+     * @var bool Indicates whether the icon should be animated with a fade in/out effect.
+     *  When enabled, the CSS class 'fa-fade' will be added.
+     * @see https://docs.fontawesome.com/web/style/animate
+     */
     private bool $_fade = false;
 
+    /**
+     * @var bool Indicates whether the icon should be animated with a shaking effect.
+     *  When enabled, the CSS class 'fa-shake' will be added.
+     * @see https://docs.fontawesome.com/web/style/animate
+     */
     private bool $_shake = false;
-
+    /**
+     * @var bool Indicates whether the icon should be animated with a bouncing effect.
+     *  When enabled, the CSS class 'fa-bounce' will be added.
+     * @see https://docs.fontawesome.com/web/style/animate
+     */
     private bool $_bounce = false;
-
+    /**
+     * @var bool Indicates whether the icon should be displayed with a fixed width.
+     *  When enabled, the CSS class 'fa-fw' will be added.
+     * @see https://docs.fontawesome.com/web/style/fixed-width
+     */
     private bool $_fixedWidth = false;
-
+    /**
+     * @var bool Indicates whether the icon should be displayed with a border.
+     *  When enabled, the CSS class 'fa-border' will be added.
+     * @see https://docs.fontawesome.com/web/style/border
+     */
     private bool $_border = false;
-
+    /**
+     * @var bool Indicates whether the icon should be aligned to the left.
+     *  When enabled, the CSS class 'fa-pull-left' will be added.
+     * @see https://docs.fontawesome.com/web/style/pull-left-right
+     */
     private bool $_pullLeft = false;
-
+    /**
+     * @var bool Indicates whether the icon should be aligned to the right.
+     *  When enabled, the CSS class 'fa-pull-right' will be added.
+     * @see https://docs.fontawesome.com/web/style/pull-left-right
+     */
     private bool $_pullRight = false;
-
+    /**
+     * @var string Specifies the direction in which the icon should be flipped.
+     *  Valid values are defined in FontAwesome::FLIP.
+     *  When set, the CSS class 'fa-flip-{$_flip}' will be added.
+     * @see https://docs.fontawesome.com/web/style/flip
+     */
     private string $_flip;
-
+    /**
+     * @var string Specifies the size of the icon.
+     *  Valid values are defined in FontAwesome::SIZE.
+     *  When set, the CSS class 'fa-{$_size}' will be added.
+     * @see https://docs.fontawesome.com/web/style/size
+     */
     private string $_size;
-
+    /**
+     * @var int Specifies the rotation degree of the icon in degrees.
+     *  When set, either 'fa-rotate-{$_rotate}' for predefined rotations
+     *  or 'fa-rotate-by' with a custom degree will be added.
+     * @see https://docs.fontawesome.com/web/style/rotate
+     */
     private int $_rotate;
-
+    /**
+     * @var array Contains transformation instructions for the icon.
+     *  Transformations may include scaling, shifting, and flipping.
+     *  Valid transformation types are defined in FontAwesome::TRANSFORM.
+     * @see https://docs.fontawesome.com/web/style/power-transform
+     */
     private array $_transform;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function init(): void
     {
@@ -102,8 +187,13 @@ class Icon extends Component
     }
 
     /**
-     * @return string
-     * @throws \Exception
+     * Converts the FontAwesome icon representation to its string equivalent as an SVG element.
+     *
+     * This method generates an SVG representation of the icon with various optional transformations,
+     * styles, and configurations applied. It uses the icon's prefix, name, and additional properties
+     * to dynamically construct the SVG with appropriate attributes and classes.
+     *
+     * @return string The rendered SVG representation of the FontAwesome icon.
      */
     public function __toString(): string
     {
@@ -190,44 +280,94 @@ class Icon extends Component
         return Html::tag('svg', "<use xlink:href=\"#$prefix-{$this->iconName}\" />", $options) . PHP_EOL;
     }
 
+    /**
+     * Retrieves the sharp status of the icon.
+     *
+     * This method checks whether the sharp style is applied to the icon and returns its current state.
+     *
+     * @return bool True if the sharp style is applied, false otherwise.
+     */
     public function getSharp(): bool
     {
         return $this->_sharp;
     }
 
+    /**
+     * Sets the sharp property for the icon representation.
+     *
+     * This method allows enabling or disabling the sharp variant of the icon.
+     *
+     * @param bool $sharp Determines whether the sharp variant of the icon should be enabled. Defaults to true.
+     *
+     * @return self The current instance for method chaining.
+     */
     public function setSharp(bool $sharp = true): self
     {
         $this->_sharp = $sharp;
         return $this;
     }
 
+    /**
+     * Sets the sharp style for the FontAwesome icon.
+     *
+     * This method applies the "sharp" style to the icon by configuring the relevant property
+     * and prepares the icon for rendering with sharp edges.
+     *
+     * @return self The current instance of the object for method chaining.
+     */
     public function sharp(): self
     {
         return $this->setSharp();
     }
 
+    /**
+     * Retrieves the duotone state of the FontAwesome icon.
+     *
+     * This method indicates whether the icon is configured as a duotone icon.
+     *
+     * @return bool True if the icon is set as duotone, false otherwise.
+     */
     public function getDuotone(): bool
     {
         return $this->_duotone;
     }
 
+    /**
+     * Sets the duotone mode for the icon.
+     *
+     * This method allows enabling or disabling the duotone style for the icon.
+     * Duotone mode applies a two-tone color scheme to the icon if supported.
+     *
+     * @param bool $duotone Whether to enable duotone mode. Defaults to true.
+     *
+     * @return self The current instance with the updated duotone setting.
+     */
     public function setDuotone(bool $duotone = true): self
     {
         $this->_duotone = $duotone;
         return $this;
     }
 
+    /**
+     * Sets the icon style to duotone.
+     *
+     * This method configures the icon to use the duotone variant, applying specific
+     * styling or functionality associated with this mode.
+     *
+     * @return self The current instance with the duotone style applied.
+     */
     public function duotone(): self
     {
         return $this->setDuotone();
     }
 
     /**
-     * Makes an icon spin 360° clock-wise
+     * Enables the spinning animation for the icon.
      *
-     * @return self
-     * @see https://docs.fontawesome.com/web/style/animate
-     * @see https://docs.fontawesome.com/web/style/style-cheatsheet
+     * This method sets the internal spin property to true, allowing the icon to be rendered with a
+     * spinning effect when converted to its final representation.
+     *
+     * @return self The instance of the current object with the spinning effect enabled.
      */
     public function spin(): self
     {
@@ -236,20 +376,12 @@ class Icon extends Component
     }
 
     /**
-     * @return self
-     */
-    public function reverse(): self
-    {
-        $this->_reverse = true;
-        return $this;
-    }
-
-    /**
-     * Makes an icon spin 360° clock-wise in 8 incremental steps
+     * Enables the "pulse" effect for the FontAwesome icon.
      *
-     * @return self
-     * @see https://docs.fontawesome.com/web/style/animate
-     * @see https://docs.fontawesome.com/web/style/style-cheatsheet
+     * This method sets the internal flag to apply the "pulse" animation effect to the icon,
+     * causing it to oscillate as part of its visual representation.
+     *
+     * @return self The current instance with the "pulse" effect enabled.
      */
     public function pulse(): self
     {
@@ -258,7 +390,26 @@ class Icon extends Component
     }
 
     /**
-     * @return self
+     * Enables the reverse mode for the current icon instance.
+     *
+     * This method sets the reverse mode, used in combination with pulse or spin to reverse the animation
+     *
+     * @return self The current instance with the reverse mode applied.
+     */
+    public function reverse(): self
+    {
+        $this->_reverse = true;
+        return $this;
+    }
+
+    /**
+     * Enables the "beat" animation for the FontAwesome icon.
+     *
+     * When this method is called, the "beat" CSS class is applied to the icon,
+     * creating a pulsating animation effect. This method sets the beat property
+     * to true and returns the current instance to allow method chaining.
+     *
+     * @return self The instance with the "beat" animation enabled.
      */
     public function beat(): self
     {
@@ -267,7 +418,12 @@ class Icon extends Component
     }
 
     /**
-     * @return self
+     * Enables the fade effect for the FontAwesome icon.
+     *
+     * This method sets the fade property, allowing the icon to be rendered with a fade effect,
+     * altering its appearance to include a smooth fading transition.
+     *
+     * @return self The current instance with the fade effect applied.
      */
     public function fade(): self
     {
@@ -276,7 +432,13 @@ class Icon extends Component
     }
 
     /**
-     * @return self
+     * Enables the shake effect for the FontAwesome icon.
+     *
+     * This method activates the shake animation by setting the relevant property
+     * indicating that the shake effect should be applied to the icon. The instance
+     * is returned for method chaining.
+     *
+     * @return self The current instance with the shake effect enabled.
      */
     public function shake(): self
     {
@@ -285,7 +447,12 @@ class Icon extends Component
     }
 
     /**
-     * @return self
+     * Enables the bounce effect for the FontAwesome icon.
+     *
+     * This method allows the icon to have a bouncing animation by setting the internal `_bounce` property
+     * to true and returns the current instance for method chaining.
+     *
+     * @return self The current instance with the bounce effect enabled.
      */
     public function bounce(): self
     {
@@ -294,7 +461,13 @@ class Icon extends Component
     }
 
     /**
-     * @return self
+     * Enables the fixed width style for the icon.
+     *
+     * This method applies the `fa-fw` class to the icon, ensuring it has a fixed width.
+     * Fixed width icons are useful for aligning icons with text or other elements in a consistent way,
+     * especially in lists or other structured layouts.
+     *
+     * @return self The current instance with the fixed width style applied.
      */
     public function fixedWidth(): self
     {
@@ -303,7 +476,12 @@ class Icon extends Component
     }
 
     /**
-     * @return self
+     * Enables the border style for the FontAwesome icon.
+     *
+     * This method applies a border effect to the icon by setting the internal border property.
+     * It modifies the icon's styling to display with a border when rendered.
+     *
+     * @return self The current instance with the border style enabled.
      */
     public function border(): self
     {
@@ -312,7 +490,12 @@ class Icon extends Component
     }
 
     /**
-     * @return self
+     * Enables the "pull left" styling for the current instance.
+     *
+     * This method applies the "pull left" configuration, typically causing the element
+     * to be styled or positioned to the left. The method can be chained with other configurations.
+     *
+     * @return self The current instance with the "pull left" styling applied.
      */
     public function pullLeft(): self
     {
@@ -321,7 +504,12 @@ class Icon extends Component
     }
 
     /**
-     * @return self
+     * Enables the "pull right" alignment for the element.
+     *
+     * This method sets the element's alignment to pull right by modifying its internal state.
+     * Allows chaining for fluent interface usage.
+     *
+     * @return self The instance of the class with the "pull right" alignment applied.
      */
     public function pullRight(): self
     {
@@ -330,9 +518,15 @@ class Icon extends Component
     }
 
     /**
-     * @param string $flip
+     * Sets the flip transformation for the FontAwesome icon.
      *
-     * @return self
+     * This method allows applying a flip transformation (e.g., horizontal, vertical, or both)
+     * to the FontAwesome icon. If the provided flip value is valid, it is stored for use
+     * in rendering the icon.
+     *
+     * @param string $flip The flip transformation to apply. Accepted values are predefined constants in FontAwesome::FLIP.
+     *
+     * @return self The current instance with the flip transformation applied.
      */
     public function flip(string $flip): self
     {
@@ -343,10 +537,14 @@ class Icon extends Component
     }
 
     /**
+     * Sets the size of the FontAwesome icon.
      *
-     * @param string $size
+     * This method allows setting the size of the icon to one of the predefined sizes in the FontAwesome size constants.
+     * If the provided size is valid, it updates the internal size property.
      *
-     * @return self
+     * @param string $size The size value to set for the icon. Must be one of the FontAwesome size constants.
+     *
+     * @return self The instance of the class with the updated size property for method chaining.
      */
     public function size(string $size): self
     {
@@ -357,9 +555,14 @@ class Icon extends Component
     }
 
     /**
-     * @param int $degree
+     * Rotates the current instance by the specified degree.
      *
-     * @return self
+     * This method sets the rotation angle for the instance and returns itself
+     * for method chaining.
+     *
+     * @param int $degree The degree by which the instance should be rotated. Defaults to 90.
+     *
+     * @return self The current instance with the updated rotation degree.
      */
     public function rotate(int $degree = 90): self
     {
@@ -368,9 +571,17 @@ class Icon extends Component
     }
 
     /**
-     * @param array $transform
+     * Applies transformations to the current FontAwesome icon configuration.
      *
-     * @return self
+     * This method processes a set of transformation instructions, validates them against
+     * predefined transformation types, and applies the valid transformations to the icon.
+     * It updates the internal state with the processed transformations.
+     *
+     * @param array $transform The list of transformations to be applied. Each transformation is
+     *                          passed as a key-value pair or as a string in the format 'transformation-value'.
+     *                          Valid transformations include predefined constants from FontAwesome::TRANSFORM.
+     *
+     * @return self The current instance with the transformations applied.
      */
     public function transform(array $transform): self
     {

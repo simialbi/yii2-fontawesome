@@ -162,6 +162,15 @@ abstract class FontAwesome
         ]);
     }
 
+    /**
+     * Transforms a set of parameters into an SVG-compatible transformation array.
+     *
+     * @param array $transform An associative array containing transformation attributes as defined in `TRANSFORM_` constants.
+     * @param int $containerWidth The width of the container for the SVG.
+     * @param int $iconWidth The width of the icon.
+     *
+     * @return array An array of transformed strings for SVG rendering, including attributes for outer, inner, and path transformations.
+     */
     public static function transformForSvg(array $transform, int $containerWidth, int $iconWidth): array
     {
         $transform = self::getMeaningfulTransform($transform);
@@ -176,6 +185,22 @@ abstract class FontAwesome
         ];
     }
 
+    /**
+     * Processes a set of transformation instructions and generates a meaningful representation
+     * of the transformations to be applied based on predefined constants and rules.
+     *
+     * @param array $transform An associative array of transformation keys and their corresponding values.
+     *                          The keys represent transformation types such as flipping, resizing, or moving,
+     *                          and their values specify the magnitude or direction of the transformation.
+     *
+     * @return array An associative array of structured transformation data containing:
+     *               - 'flipX' (bool): Indicates whether to flip horizontally.
+     *               - 'flipY' (bool): Indicates whether to flip vertically.
+     *               - 'size' (int): Adjusted size value factoring growth or shrinkage.
+     *               - 'x' (int): Horizontal displacement value.
+     *               - 'y' (int): Vertical displacement value.
+     *               - 'rotate' (int): Rotation angle applied.
+     */
     protected static function getMeaningfulTransform(array $transform): array
     {
         $result = [
