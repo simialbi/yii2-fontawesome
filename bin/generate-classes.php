@@ -1,10 +1,12 @@
 #!/bin/php
 <?php
 
-$file = dirname(__DIR__) . '/fontawesome-pro/icons.json';
+ini_set('memory_limit', '512M');
+
+$file = dirname(__DIR__) . '/fontawesome-pro/icon-families.json';
 
 if (!file_exists($file)) {
-    $file = dirname(__DIR__) . '/vendor/bower-asset/fontawesome/metadata/icons.json';
+    $file = dirname(__DIR__) . '/vendor/bower-asset/fontawesome/metadata/icon-families.json';
 }
 
 $data = json_decode(file_get_contents($file), true);
@@ -13,42 +15,129 @@ $solid = [];
 $regular = [];
 $brands = [];
 $light = [];
-$duotone = [];
 $thin = [];
 $custom = [];
-foreach ($data as $name => $meta) {
+$sizes = [];
+foreach ($data as $name => $icon) {
     $name = '_' . strtoupper(str_replace('-', '_', $name));
-    foreach ($meta['styles'] as $style) {
-        $$style[$name] = [$meta['svg'][$style]['width'], $meta['svg'][$style]['height'], $meta['svg'][$style]['path'], $meta['aliases']['names'] ?? []];
+
+    foreach ($icon['svgs'] as $family => $styles) {
+        foreach ($styles as $style => $meta) {
+            if ($style === 'custom') {
+                $name = "_K$name";
+            }
+            $k = match ($family) {
+                'classic', 'kit' => 0,
+                'duotone' => 1,
+                'sharp' => 2,
+                'sharp-duotone' => 3
+            };
+            $$style[$name][$k] = $meta['path'];
+            if (!isset($sizes[$name])) {
+                $sizes[$name] = [$meta['width'], $meta['height']];
+            }
+            foreach ($icon['aliases']['names'] ?? [] as $alias) {
+                $alias = '_' . strtoupper(str_replace('-', '_', $alias));
+                $$style[$alias] = $name;
+                if (!isset($sizes[$alias])) {
+                    $sizes[$alias] = $name;
+                }
+            }
+        }
     }
+//    foreach ($meta['styles'] as $style) {
+//        if ($style === 'custom') {
+//            $name = "_K$name";
+//        }
+//        if (!isset($sizes[$name])) {
+//            $sizes[$name] = [$meta['svg'][$style]['width'], $meta['svg'][$style]['height']];
+//        }
+//        $$style[$name] = [$meta['svg'][$style]['path'], $meta['aliases']['names'] ?? []];
+//        foreach ($meta['aliases']['names'] ?? [] as $alias) {
+//            $alias = '_' . strtoupper(str_replace('-', '_', $alias));
+//            $sizes[$alias] = $name;
+//        }
+//    }
 }
 
-foreach (['solid', 'regular', 'brands', 'light', 'duotone', 'thin', 'custom'] as $style) {
-    $fileName = dirname(__DIR__) . '/src/icons/' . ucfirst($style) . '.php';
-    $class = ucfirst($style);
-    $code = <<<CODE
+foreach (['solid', 'regular', 'brands', 'light', 'thin', 'custom'] as $style) {
+    $classes = [
+        '' => []
+    ];
+    if ($style !== 'custom' && $style !== 'brands') {
+        $classes = array_merge($classes, [
+            'Duotone' => [],
+            'Sharp' => [],
+            'SharpDuotone' => []
+        ]);
+    }
+    foreach ($$style as $name => $icon) {
+        if (is_string($icon)) {
+            $classes[''][] = "    const $name = self::$icon;";
+            if ($style !== 'custom' && $style !== 'brands') {
+                $classes['Duotone'][] = "    const $name = self::$icon;";
+                $classes['Sharp'][] = "    const $name = self::$icon;";
+                $classes['SharpDuotone'][] = "    const $name = self::$icon;";
+            }
+            continue;
+        }
+        $classes[''][] = "    const $name = '{$icon[0]}';";
+        if ($style !== 'custom' && $style !== 'brands') {
+            $classes['Duotone'][] = "    const $name = ['{$icon[1][0]}', '{$icon[1][1]}'];";
+            $classes['Sharp'][] = "    const $name = '{$icon[2]}';";
+            $classes['SharpDuotone'][] = "    const $name = ['{$icon[3][0]}', '{$icon[3][1]}'];";
+        }
+
+//        if (is_array($icon[0])) {
+//            $val = implode('\', \'', $icon[0]);
+//            $code .= "    const $name = ['$val'];\n";
+//        } else {
+//            $code .= "    const $name = ['{$icon[0]}'];\n";
+//        }
+//
+//        foreach ($icon[1] as $alias) {
+//            $alias = '_' . strtoupper(str_replace('-', '_', $alias));
+//            $code .= "    const $alias = self::$name;\n";
+//        }
+    }
+
+    foreach ($classes as $class => $code) {
+        $class = ucfirst($style) . $class;
+        $code = implode("\n", $code);
+        $code = "<?php\nnamespace rmrevin\yii\\fontawesome\icons;\n\nclass $class\n{\n$code\n}\n";
+        $fileName = dirname(__DIR__) . "/src/icons/$class.php";
+        file_put_contents($fileName, $code);
+    }
+
+//    $code = <<<CODE
+//<?php
+//namespace rmrevin\yii\\fontawesome\icons;
+//
+//class $class
+//{
+//
+//CODE;
+//    $code .= "}\n";
+//
+//    file_put_contents($fileName, $code);
+}
+
+$code = <<<CODE
 <?php
 namespace rmrevin\yii\\fontawesome\icons;
 
-class $class
+class Sizes
 {
 
 CODE;
-    foreach ($$style as $name => $icon) {
-        if (is_array($icon[2])) {
-            $val = implode('\', \'', $icon[2]);
-            $code .= "    const $name = [{$icon[0]}, {$icon[1]}, ['$val']];\n";
-        } else {
-            $code .= "    const $name = [{$icon[0]}, {$icon[1]}, '{$icon[2]}'];\n";
-        }
-
-        foreach ($icon[3] as $alias) {
-            $alias = '_' . strtoupper(str_replace('-', '_', $alias));
-            $code .= "    const $alias = self::$name;\n";
-        }
+foreach ($sizes as $name => $size) {
+    if (is_string($size)) {
+        $code .= "    const $name = self::$size;\n";
+    } else {
+        $code .= "    const $name = [$size[0], $size[1]];\n";
     }
-
-    $code .= "}\n";
-
-    file_put_contents($fileName, $code);
 }
+
+$code .= "}\n";
+
+file_put_contents(dirname(__DIR__) . '/src/icons/Sizes.php', $code);
