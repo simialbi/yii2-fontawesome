@@ -15,6 +15,7 @@ use yii\helpers\Html;
 /**
  * Class Stack
  * @package rmrevin\yii\fontawesome\component
+ * @deprecated Use Layer class instead.
  */
 class Stack extends BaseObject
 {

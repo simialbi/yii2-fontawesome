@@ -9,10 +9,10 @@ namespace rmrevin\yii\fontawesome\component;
 
 use rmrevin\yii\fontawesome\AssetBundle;
 use rmrevin\yii\fontawesome\FontAwesome;
+use rmrevin\yii\fontawesome\helpers\Html;
 use Yii;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 
 /**
  * This class represents a FontAwesome icon component, offering various configurations,
@@ -233,6 +233,9 @@ class Icon extends BaseObject
         }
 
         Html::addCssClass($options, ['svg-inline--fa', "fa-{$this->iconName}"]);
+        if ($this->_inverse) {
+            Html::addCssClass($options, 'fa-inverse');
+        }
         if ($this->_spin) {
             Html::addCssClass($options, 'fa-spin');
         }
@@ -292,10 +295,10 @@ class Icon extends BaseObject
         if (isset($this->_transform)) {
             $transform = FontAwesome::transformForSvg($this->_transform, $icon[0], $icon[0]);
             return Html::tag(
-                'svg',
-                "<g transform=\"{$transform['outer']}\"><g transform=\"{$transform['inner']}\"><use href=\"#$prefix-{$this->iconName}\" transform=\"{$transform['path']}\" /></g></g>",
-                $options
-            ) . PHP_EOL;
+                    'svg',
+                    "<g transform=\"{$transform['outer']}\"><g transform=\"{$transform['inner']}\"><use href=\"#$prefix-{$this->iconName}\" transform=\"{$transform['path']}\" /></g></g>",
+                    $options
+                ) . PHP_EOL;
         }
 
         return Html::tag('svg', "<use href=\"#$prefix-{$this->iconName}\" />", $options) . PHP_EOL;
@@ -380,6 +383,19 @@ class Icon extends BaseObject
     public function duotone(): self
     {
         return $this->setDuotone();
+    }
+
+    /**
+     * Enables the inverse style for the FontAwesome icon.
+     *
+     * This method sets the inverse property to true, which applies the inverse style to the icon's appearance.
+     *
+     * @return self The instance of the class with the inverse style enabled for method chaining.
+     */
+    public function inverse(): self
+    {
+        $this->_inverse = true;
+        return $this;
     }
 
     /**
@@ -545,7 +561,8 @@ class Icon extends BaseObject
      * to the FontAwesome icon. If the provided flip value is valid, it is stored for use
      * in rendering the icon.
      *
-     * @param string $flip The flip transformation to apply. Accepted values are predefined constants in FontAwesome::FLIP.
+     * @param string $flip The flip transformation to apply. Accepted values are predefined constants in
+     *     FontAwesome::FLIP.
      *
      * @return self The current instance with the flip transformation applied.
      */

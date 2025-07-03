@@ -129,7 +129,7 @@ abstract class FontAwesome
             'options' => $options,
             'prefix' => static::$cssPrefix
         ]);
-        AssetBundle::$iconStack[$name] = $icon;
+        AssetBundle::$iconStack[static::$cssPrefix . '-' . $name] = $icon;
         return $icon;
     }
 
@@ -160,6 +160,16 @@ abstract class FontAwesome
             'prefix' => static::$cssPrefix,
             'options' => $options
         ]);
+    }
+
+    public static function l(array $options = []): component\Layer
+    {
+        return self::layer($options);
+    }
+
+    public static function layer(array $options = []): component\Layer
+    {
+        return new component\Layer(['options' => $options]);
     }
 
     /**
