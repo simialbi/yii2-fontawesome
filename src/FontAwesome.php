@@ -247,4 +247,50 @@ abstract class FontAwesome
 
         return $result;
     }
+
+    /**
+     * Generates the SVG path or symbol for a given icon based on its properties,
+     * such as prefix, style (regular, solid, light, etc.), and optional features
+     * like sharp or duotone styles.
+     *
+     * @param component\Icon $icon An instance of the Icon class representing the icon,
+     *                             containing properties like prefix and icon name to determine
+     *                             the appropriate SVG path.
+     * @param bool $withSymbol Determines whether the output should include the <symbol> definition
+     *                         for the icon (true) or just the raw path content (false).
+     *
+     * @return string|null The generated SVG content, either as a <symbol> element or a standalone
+     *                     SVG path definition, or null if the icon data cannot be resolved.
+     */
+    public static function renderIconPath(component\Icon $icon, bool $withSymbol = true): ?string
+    {
+        $class = 'rmrevin\\yii\\fontawesome\\icons\\' . match ($icon->prefix) {
+            default => 'Solid',
+            'far' => 'Regular',
+            'fal' => 'Light',
+            'fab' => 'Brands',
+            'fat' => 'Thin',
+            'kit' => 'Custom'
+        };
+        $prefix = "{$icon->prefix}-";
+        if ($icon->sharp) {
+            $prefix .= 's-';
+            $class .= 'Sharp';
+        }
+        if ($icon->duotone) {
+            $prefix .= 'd-';
+            $class .= 'Duotone';
+        }
+        $path = constant("$class::_" . strtoupper(str_replace('-', '_', $icon->iconName)));
+
+        $content = is_array($path)
+            ? "<path class=\"fa-secondary\" opacity=\".4\" d=\"{$path[0]}\" />" . (empty($path[1])
+                ? ''
+                : "<path class=\"fa-primary\" d=\"{$path[1]}\" />"
+            )
+            :"<path fill=\"currentColor\" d=\"{$path}\"/>";
+        return $withSymbol
+            ? "<symbol id=\"$prefix-{$icon->iconName}\">$content</symbol>"
+            : $content;
+    }
 }

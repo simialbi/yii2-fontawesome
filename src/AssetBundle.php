@@ -57,32 +57,10 @@ class AssetBundle extends \yii\web\AssetBundle
 
             $html = '<svg style="display: none;">' . PHP_EOL;
             foreach ($icons as $icon) {
-                $class = 'rmrevin\\yii\\fontawesome\\icons\\' . match ($icon->prefix) {
-                    default => 'Solid',
-                    'far' => 'Regular',
-                    'fal' => 'Light',
-                    'fab' => 'Brands',
-                    'fat' => 'Thin',
-                    'kit' => 'Custom'
-                };
-                $prefix = "{$icon->prefix}-";
-                if ($icon->sharp) {
-                    $prefix .= 's-';
-                    $class .= 'Sharp';
+                if ($icon->isMask) {
+                    continue;
                 }
-                if ($icon->duotone) {
-                    $prefix .= 'd-';
-                    $class .= 'Duotone';
-                }
-                $path = constant("$class::_" . strtoupper(str_replace('-', '_', $icon->iconName)));
-
-                $content = is_array($path)
-                    ? "<path class=\"fa-secondary\" opacity=\".4\" d=\"{$path[0]}\" />" . (empty($path[1])
-                        ? ''
-                        : "<path class=\"fa-primary\" d=\"{$path[1]}\" />"
-                    )
-                    :"<path fill=\"currentColor\" d=\"{$path}\"/>";
-                $html .= "<symbol id=\"$prefix-{$icon->iconName}\">$content</symbol>" . PHP_EOL;
+                $html .= FontAwesome::renderIconPath($icon) . PHP_EOL;
             }
             $html .= '</svg>' . PHP_EOL;
             echo $html;

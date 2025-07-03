@@ -10,7 +10,7 @@ namespace rmrevin\yii\fontawesome\component;
 use rmrevin\yii\fontawesome\AssetBundle;
 use rmrevin\yii\fontawesome\FontAwesome;
 use Yii;
-use yii\base\Component;
+use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
@@ -25,8 +25,9 @@ use yii\helpers\Html;
  *
  * @property bool $sharp
  * @property bool $duotone
+ * @property bool $isMask
  */
-class Icon extends Component
+class Icon extends BaseObject
 {
     /**
      * @var int a counter used to generate [[id]] for icons.
@@ -173,6 +174,17 @@ class Icon extends Component
     private array $_transform;
 
     /**
+     * @var self The representation of the mask background icon of this icon.
+     * @see https://docs.fontawesome.com/web/style/mask
+     */
+    private self $_mask;
+
+    /**
+     * @var bool Indicates whether this icon represents a mask or not.
+     */
+    private bool $_isMask = false;
+
+    /**
      * {@inheritDoc}
      */
     public function init(): void
@@ -268,16 +280,25 @@ class Icon extends Component
                 Html::addCssStyle($options, ['--fa-rotate-angle' => $this->_rotate . 'deg']);
             }
         }
+        if (isset($this->_mask)) {
+            $mask = ($this->_mask->prefix === 'kit' ? '_K' : '') . '_' . strtoupper(str_replace('-', '_', $this->_mask->iconName));
+            $mask = constant("rmrevin\yii\\fontawesome\icons\Sizes::$mask");
+            $transform = FontAwesome::transformForSvg($this->_transform ?? [], $mask[0], $icon[0]);
+            $id = uniqid();
+            $clipPath = FontAwesome::renderIconPath($this->_mask, false);
+
+            return Html::tag('svg', "<defs><clipPath id=\"clip-$id\">$clipPath</clipPath><mask x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" id=\"mask-$id\" maskUnits=\"userSpaceOnUse\" maskContentUnits=\"userSpaceOnUse\"><rect x=\"0\" y=\"0\" width=\"100%\" height=\"100%\" fill=\"white\" /><g transform=\"{$transform['outer']}\"><g transform=\"{$transform['inner']}\"><use href=\"#$prefix-{$this->iconName}\" fill=\"black\" transform=\"{$transform['path']}\" /></g></g></mask></defs><rect fill=\"currentColor\" clip-path=\"url(#clip-$id)\" mask=\"url(#mask-$id)\" x=\"0\" y=\"0\" width=\"100%\" height=\"100%\" />", $options);
+        }
         if (isset($this->_transform)) {
             $transform = FontAwesome::transformForSvg($this->_transform, $icon[0], $icon[0]);
             return Html::tag(
                 'svg',
-                "<g transform=\"{$transform['outer']}\"><g transform=\"{$transform['inner']}\"><use xlink:href=\"#$prefix-{$this->iconName}\" transform=\"{$transform['path']}\" /></g></g>",
+                "<g transform=\"{$transform['outer']}\"><g transform=\"{$transform['inner']}\"><use href=\"#$prefix-{$this->iconName}\" transform=\"{$transform['path']}\" /></g></g>",
                 $options
             ) . PHP_EOL;
         }
 
-        return Html::tag('svg', "<use xlink:href=\"#$prefix-{$this->iconName}\" />", $options) . PHP_EOL;
+        return Html::tag('svg', "<use href=\"#$prefix-{$this->iconName}\" />", $options) . PHP_EOL;
     }
 
     /**
@@ -600,5 +621,46 @@ class Icon extends Component
         }
         $this->_transform = $set;
         return $this;
+    }
+
+    /**
+     * Sets a mask for the current object.
+     *
+     * This method assigns a given mask to the object and allows for method chaining.
+     *
+     * @param self $mask The mask object to be assigned.
+     *
+     * @return static The current instance with the mask applied.
+     */
+    public function mask(self $mask): static
+    {
+        $this->_mask = $mask;
+        return $this;
+    }
+
+    /**
+     * Retrieves the mask status of the object.
+     *
+     * This method returns the current mask state, which indicates whether the object is treated as a mask.
+     *
+     * @return bool The mask status of the object.
+     */
+    public function getIsMask(): bool
+    {
+        return $this->_isMask;
+    }
+
+    /**
+     * Sets whether the object should be treated as a mask.
+     *
+     * This method updates the internal property to indicate whether the object should act as a mask.
+     *
+     * @param bool $isMask A boolean value indicating if the object should be treated as a mask.
+     *
+     * @return void
+     */
+    public function setIsMask(bool $isMask): void
+    {
+        $this->_isMask = $isMask;
     }
 }
