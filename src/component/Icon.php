@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
  * @property bool $sharp
  * @property bool $duotone
  * @property bool $isMask
+ * @property-write bool $preventUse
  */
 class Icon extends BaseObject
 {
@@ -185,15 +186,20 @@ class Icon extends BaseObject
     private bool $_isMask = false;
 
     /**
+     * @var bool Whether to prevent use method and force full rendering
+     */
+    private bool $_preventUse = false;
+
+    /**
      * {@inheritDoc}
      */
     public function init(): void
     {
         parent::init();
 
-        if (!isset($this->options['id'])) {
-            $this->options['id'] = static::$autoIdPrefix . static::$counter++;
-        }
+//        if (!isset($this->options['id'])) {
+//            $this->options['id'] = static::$autoIdPrefix . static::$counter++;
+//        }
 
         AssetBundle::register(Yii::$app->view);
     }
@@ -295,13 +301,17 @@ class Icon extends BaseObject
         if (isset($this->_transform)) {
             $transform = FontAwesome::transformForSvg($this->_transform, $icon[0], $icon[0]);
             return Html::tag(
-                    'svg',
-                    "<g transform=\"{$transform['outer']}\"><g transform=\"{$transform['inner']}\"><use href=\"#$prefix-{$this->iconName}\" transform=\"{$transform['path']}\" /></g></g>",
-                    $options
-                ) . PHP_EOL;
+                'svg',
+                "<g transform=\"{$transform['outer']}\"><g transform=\"{$transform['inner']}\"><use href=\"#$prefix-{$this->iconName}\" transform=\"{$transform['path']}\" /></g></g>",
+                $options
+            );
         }
 
-        return Html::tag('svg', "<use href=\"#$prefix-{$this->iconName}\" />", $options) . PHP_EOL;
+        $content = $this->_preventUse
+            ? FontAwesome::renderIconPath($this, false)
+            : "<use href=\"#$prefix-{$this->iconName}\" />";
+
+        return Html::tag('svg', $content, $options);
     }
 
     /**
@@ -383,6 +393,19 @@ class Icon extends BaseObject
     public function duotone(): self
     {
         return $this->setDuotone();
+    }
+
+    /**
+     * Enables the prevention of usage of use tag.
+     *
+     * This method sets an internal flag to prevent the use of a the use tag and renders full icon.
+     *
+     * @return self The instance of the class with the updated prevention flag for method chaining.
+     */
+    public function setPreventUse(): self
+    {
+        $this->_preventUse = true;
+        return $this;
     }
 
     /**
@@ -510,6 +533,17 @@ class Icon extends BaseObject
     {
         $this->_fixedWidth = true;
         return $this;
+    }
+
+    /**
+     * This is a shortcut for the fixedWidth method.
+     *
+     * @return self The current instance with the fixed width style applied.
+     * @see fixedWidth
+     */
+    public function fw(): self
+    {
+        return $this->fixedWidth();
     }
 
     /**

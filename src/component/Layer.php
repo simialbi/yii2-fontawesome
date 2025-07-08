@@ -48,10 +48,11 @@ class Layer extends BaseObject
      *
      * @param string|Icon $icon The icon object or text or counter to be added.
      * @param array $options Additional HTML tag options or attributes.
+     * @param bool $prepend Set true to prepend icon instead of appending
      *
      * @return self
      */
-    public function add(string|Icon $icon, array $options = []): self
+    public function add(string|Icon $icon, array $options = [], bool $prepend = false): self
     {
         if (is_string($icon)) {
             $tag = ArrayHelper::remove($options, 'tag', 'span');
@@ -62,7 +63,11 @@ class Layer extends BaseObject
         } else {
             AssetBundle::$iconStack[$icon->prefix . '-' . $icon->iconName] = $icon;
         }
-        $this->_elements[] = $icon;
+        if ($prepend) {
+            array_unshift($this->_elements, $icon);
+        } else {
+            $this->_elements[] = $icon;
+        }
 
         return $this;
     }

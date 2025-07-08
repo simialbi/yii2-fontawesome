@@ -157,7 +157,6 @@ abstract class FontAwesome
     public static function stack(array $options = []): component\Stack
     {
         return new component\Stack([
-            'prefix' => static::$cssPrefix,
             'options' => $options
         ]);
     }
@@ -291,7 +290,11 @@ abstract class FontAwesome
             $prefix .= 'd-';
             $class .= 'Duotone';
         }
-        $path = constant("$class::_" . strtoupper(str_replace('-', '_', $icon->iconName)));
+        $name = '_' . strtoupper(str_replace('-', '_', $icon->iconName));
+        if ($icon->prefix === 'kit') {
+            $name = "_K$name";
+        }
+        $path = constant("$class::$name");
 
         $content = is_array($path)
             ? "<path class=\"fa-secondary\" opacity=\".4\" d=\"{$path[0]}\" />" . (empty($path[1])
