@@ -7,6 +7,7 @@
 
 namespace rmrevin\yii\fontawesome\component;
 
+use ReflectionClass;
 use rmrevin\yii\fontawesome\AssetBundle;
 use rmrevin\yii\fontawesome\FontAwesome;
 use rmrevin\yii\fontawesome\helpers\Html;
@@ -200,6 +201,7 @@ class Icon extends BaseObject
 //        if (!isset($this->options['id'])) {
 //            $this->options['id'] = static::$autoIdPrefix . static::$counter++;
 //        }
+        $this->iconName = trim($this->iconName);
 
         AssetBundle::register(Yii::$app->view);
     }
