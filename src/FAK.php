@@ -1,15 +1,10 @@
 <?php
-/**
- * FAS.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome;
 
 /**
- * Class FAK
- * @package rmrevin\yii\fontawesome
+ * Represents the FAK (Font Awesome Kit) extension of FontAwesome.
+ * This class defines a CSS prefix specific to the Kit style icons.
  */
 class FAK extends FontAwesome
 {

@@ -1,15 +1,10 @@
 <?php
-/**
- * FAB.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome;
 
 /**
- * Class FAB
- * @package rmrevin\yii\fontawesome
+ * Represents the FAB (Font Awesome Brands) extension of FontAwesome.
+ * This class defines a CSS prefix specific to the Brands style icons.
  */
 class FAB extends FontAwesome
 {

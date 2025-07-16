@@ -1,18 +1,14 @@
 <?php
-/**
- * FA.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome;
 
 /**
- * Class FA
+ * Represents the default Font Awesome class for backward compatibility. Prevent usage if possible
  * @package rmrevin\yii\fontawesome
- * @deprecated use FAB FAS FAR FAL classes
+ * @deprecated use FAB FAS FAR FAL FAK FAT classes
+ * @see FAS, FAR, FAL, FAK, FAT, FAB
  */
 class FA extends FontAwesome
 {
-    public static $cssPrefix = 'far';
+    public static $cssPrefix = 'fas';
 }

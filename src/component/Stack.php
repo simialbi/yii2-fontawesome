@@ -1,9 +1,4 @@
 <?php
-/**
- * Stack.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome\component;
 
@@ -11,7 +6,6 @@ use rmrevin\yii\fontawesome\FAS;
 
 /**
  * Class Stack
- * @package rmrevin\yii\fontawesome\component
  * @deprecated Use Layer class instead.
  */
 class Stack extends Layer

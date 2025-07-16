@@ -1,9 +1,4 @@
 <?php
-/**
- * Icon.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome\component;
 

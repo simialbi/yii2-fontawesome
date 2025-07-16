@@ -1,15 +1,10 @@
 <?php
-/**
- * FAR.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome;
 
 /**
- * Class FAR
- * @package rmrevin\yii\fontawesome
+ * Represents the FAR (Font Awesome Regular) extension of FontAwesome.
+ * This class defines a CSS prefix specific to the Regular style icons.
  */
 class FAR extends FontAwesome
 {

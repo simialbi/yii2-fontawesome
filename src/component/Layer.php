@@ -13,7 +13,6 @@ use rmrevin\yii\fontawesome\helpers\Html;
  * With this new approach, you can use more than two icons.
  *
  * @see https://fontawesome.com/docs/web/style/layer
- * @package rmrevin\yii\fontawesome\component
  */
 class Layer extends BaseObject
 {

@@ -1,14 +1,9 @@
 <?php
-/**
- * FontAwesome.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome;
 
 /**
- * Class FA
+ * Class FontAwesome
  * @package rmrevin\yii\fontawesome
  */
 abstract class FontAwesome

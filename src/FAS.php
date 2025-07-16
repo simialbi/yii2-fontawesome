@@ -1,15 +1,10 @@
 <?php
-/**
- * FAS.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome;
 
 /**
- * Class FAS
- * @package rmrevin\yii\fontawesome
+ * Represents the FAS (Font Awesome Solid) extension of FontAwesome.
+ * This class defines a CSS prefix specific to the Solid style icons.
  */
 class FAS extends FontAwesome
 {

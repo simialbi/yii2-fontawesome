@@ -1,15 +1,10 @@
 <?php
-/**
- * FAS.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome;
 
 /**
- * Class FAT
- * @package rmrevin\yii\fontawesome
+ * Represents the FAT (Font Awesome Thin) extension of FontAwesome.
+ * This class defines a CSS prefix specific to the Thin style icons.
  */
 class FAT extends FontAwesome
 {

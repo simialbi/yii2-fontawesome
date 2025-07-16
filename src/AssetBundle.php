@@ -1,8 +1,4 @@
 <?php
-/**
- * @package yii2-fontawesome
- * @author Simon Karlen <simi.albi@gmail.com>
- */
 
 namespace rmrevin\yii\fontawesome;
 
@@ -10,8 +6,8 @@ use rmrevin\yii\fontawesome\component\Icon;
 use Yii;
 
 /**
- * Class AssetBundle
- * @package rmrevin\yii\fontawesome
+ * The needed css of the Font Awesome official package needed to correctly style the icons.
+ * This class also render the reference svg on the end of the body to provide all icons used on the current page.
  */
 class AssetBundle extends \yii\web\AssetBundle
 {

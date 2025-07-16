@@ -1,15 +1,10 @@
 <?php
-/**
- * FAL.php
- * @author Revin Roman
- * @link https://rmrevin.ru
- */
 
 namespace rmrevin\yii\fontawesome;
 
 /**
- * Class FAL
- * @package rmrevin\yii\fontawesome
+ * Represents the FAL (Font Awesome Light) extension of FontAwesome.
+ * This class defines a CSS prefix specific to the Light style icons.
  */
 class FAL extends FontAwesome
 {
