@@ -38,4 +38,4 @@ jobs:
             -   name: Generate classes
                 run: php -f ./bin/generate-classes.php
             -   name: Run unit tests without coverage
-                run: vendor/bin/phpunit --verbose --colors=always
+                run: vendor/bin/phpunit --colors=always
