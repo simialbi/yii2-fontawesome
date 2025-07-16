@@ -4,9 +4,11 @@
 ini_set('memory_limit', '512M');
 
 $file = dirname(__DIR__) . '/fontawesome-pro/icon-families.json';
+$isPro = true;
 
 if (!file_exists($file)) {
     $file = dirname(__DIR__) . '/vendor/bower-asset/fontawesome/metadata/icon-families.json';
+    $isPro = false;
 }
 if (!is_dir(dirname(__DIR__) . '/src/icons')) {
     mkdir(dirname(__DIR__) . '/src/icons');
@@ -50,11 +52,13 @@ foreach ($data as $name => $icon) {
     }
 }
 
+//var_dump($solid); exit;
+
 foreach (['solid', 'regular', 'brands', 'light', 'thin', 'custom'] as $style) {
     $classes = [
         '' => []
     ];
-    if ($style !== 'custom' && $style !== 'brands') {
+    if ($style !== 'custom' && $style !== 'brands' && $isPro) {
         $classes = array_merge($classes, [
             'Duotone' => [],
             'Sharp' => [],
@@ -64,7 +68,7 @@ foreach (['solid', 'regular', 'brands', 'light', 'thin', 'custom'] as $style) {
     foreach ($$style as $name => $icon) {
         if (is_string($icon)) {
             $classes[''][] = "    const $name = self::$icon;";
-            if ($style !== 'custom' && $style !== 'brands') {
+            if ($style !== 'custom' && $style !== 'brands' && $isPro) {
                 $classes['Duotone'][] = "    const $name = self::$icon;";
                 $classes['Sharp'][] = "    const $name = self::$icon;";
                 $classes['SharpDuotone'][] = "    const $name = self::$icon;";
@@ -72,19 +76,21 @@ foreach (['solid', 'regular', 'brands', 'light', 'thin', 'custom'] as $style) {
             continue;
         }
         $classes[''][] = "    const $name = '{$icon[0]}';";
-        if ($style !== 'custom' && $style !== 'brands') {
+        if ($style !== 'custom' && $style !== 'brands' && $isPro) {
             $classes['Duotone'][] = "    const $name = ['{$icon[1][0]}', '{$icon[1][1]}'];";
             $classes['Sharp'][] = "    const $name = '{$icon[2]}';";
             $classes['SharpDuotone'][] = "    const $name = ['{$icon[3][0]}', '{$icon[3][1]}'];";
         }
     }
 
-    foreach ($classes as $class => $code) {
-        $class = ucfirst($style) . $class;
-        $code = implode("\n", $code);
-        $code = "<?php\nnamespace rmrevin\yii\\fontawesome\icons;\n\nclass $class\n{\n$code\n}\n";
-        $fileName = dirname(__DIR__) . "/src/icons/$class.php";
-        file_put_contents($fileName, $code);
+    if (!empty($classes[''])) {
+        foreach ($classes as $class => $code) {
+            $class = ucfirst($style) . $class;
+            $code = implode("\n", $code);
+            $code = "<?php\nnamespace rmrevin\yii\\fontawesome\icons;\n\nclass $class\n{\n$code\n}\n";
+            $fileName = dirname(__DIR__) . "/src/icons/$class.php";
+            file_put_contents($fileName, $code);
+        }
     }
 }
 
