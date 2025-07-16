@@ -7,7 +7,6 @@
 
 namespace rmrevin\yii\fontawesome\component;
 
-use ReflectionClass;
 use rmrevin\yii\fontawesome\AssetBundle;
 use rmrevin\yii\fontawesome\FontAwesome;
 use rmrevin\yii\fontawesome\helpers\Html;
@@ -674,6 +673,7 @@ class Icon extends BaseObject
      */
     public function mask(self $mask): static
     {
+        $mask->isMask = true;
         $this->_mask = $mask;
         return $this;
     }
