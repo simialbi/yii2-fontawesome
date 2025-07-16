@@ -32,17 +32,6 @@ use yii\helpers\ArrayHelper;
 class Icon extends BaseObject
 {
     /**
-     * @var int a counter used to generate [[id]] for icons.
-     * @internal
-     */
-    public static int $counter = 0;
-    /**
-     * @var string the prefix to the automatically generated icon IDs.
-     * @see getId()
-     */
-    public static string $autoIdPrefix = 'fa';
-
-    /**
      * @var string Style Prefix. One of fas, far, fal, fab, fat, fad or kit. Defaults to fas
      */
     public string $prefix = 'fas';
@@ -198,9 +187,6 @@ class Icon extends BaseObject
     {
         parent::init();
 
-//        if (!isset($this->options['id'])) {
-//            $this->options['id'] = static::$autoIdPrefix . static::$counter++;
-//        }
         $this->iconName = trim($this->iconName);
 
         AssetBundle::register(Yii::$app->view);
@@ -253,10 +239,11 @@ class Icon extends BaseObject
         if ($this->_reverse && ($this->_spin || $this->_pulse)) {
             Html::addCssClass($options, 'fa-spin-reverse');
         }
-        if ($this->_beat) {
+        if ($this->_beat && $this->_fade) {
+            Html::addCssClass($options, 'fa-beat-fade');
+        } elseif ($this->_beat) {
             Html::addCssClass($options, 'fa-beat');
-        }
-        if ($this->_fade) {
+        } elseif ($this->_fade) {
             Html::addCssClass($options, 'fa-fade');
         }
         if ($this->_shake) {

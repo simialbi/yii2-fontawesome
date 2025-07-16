@@ -8,6 +8,9 @@ $file = dirname(__DIR__) . '/fontawesome-pro/icon-families.json';
 if (!file_exists($file)) {
     $file = dirname(__DIR__) . '/vendor/bower-asset/fontawesome/metadata/icon-families.json';
 }
+if (!is_dir(dirname(__DIR__) . '/src/icons')) {
+    mkdir(dirname(__DIR__) . '/src/icons');
+}
 
 $data = json_decode(file_get_contents($file), true);
 
@@ -45,19 +48,6 @@ foreach ($data as $name => $icon) {
             }
         }
     }
-//    foreach ($meta['styles'] as $style) {
-//        if ($style === 'custom') {
-//            $name = "_K$name";
-//        }
-//        if (!isset($sizes[$name])) {
-//            $sizes[$name] = [$meta['svg'][$style]['width'], $meta['svg'][$style]['height']];
-//        }
-//        $$style[$name] = [$meta['svg'][$style]['path'], $meta['aliases']['names'] ?? []];
-//        foreach ($meta['aliases']['names'] ?? [] as $alias) {
-//            $alias = '_' . strtoupper(str_replace('-', '_', $alias));
-//            $sizes[$alias] = $name;
-//        }
-//    }
 }
 
 foreach (['solid', 'regular', 'brands', 'light', 'thin', 'custom'] as $style) {
@@ -87,18 +77,6 @@ foreach (['solid', 'regular', 'brands', 'light', 'thin', 'custom'] as $style) {
             $classes['Sharp'][] = "    const $name = '{$icon[2]}';";
             $classes['SharpDuotone'][] = "    const $name = ['{$icon[3][0]}', '{$icon[3][1]}'];";
         }
-
-//        if (is_array($icon[0])) {
-//            $val = implode('\', \'', $icon[0]);
-//            $code .= "    const $name = ['$val'];\n";
-//        } else {
-//            $code .= "    const $name = ['{$icon[0]}'];\n";
-//        }
-//
-//        foreach ($icon[1] as $alias) {
-//            $alias = '_' . strtoupper(str_replace('-', '_', $alias));
-//            $code .= "    const $alias = self::$name;\n";
-//        }
     }
 
     foreach ($classes as $class => $code) {
@@ -108,18 +86,6 @@ foreach (['solid', 'regular', 'brands', 'light', 'thin', 'custom'] as $style) {
         $fileName = dirname(__DIR__) . "/src/icons/$class.php";
         file_put_contents($fileName, $code);
     }
-
-//    $code = <<<CODE
-//<?php
-//namespace rmrevin\yii\\fontawesome\icons;
-//
-//class $class
-//{
-//
-//CODE;
-//    $code .= "}\n";
-//
-//    file_put_contents($fileName, $code);
 }
 
 $code = <<<CODE

@@ -7,6 +7,7 @@
 
 namespace yiiunit\extensions\fontawesome;
 
+use Yii;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -17,8 +18,11 @@ use yii\helpers\ArrayHelper;
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
-    public static $params;
+    public static ?array $params = null;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -26,16 +30,27 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        restore_error_handler();
+        restore_exception_handler();
+    }
+
+    /**
      * Populates Yii::$app with a new application
      * The application will be destroyed on tearDown() automatically.
      * @param string $appClass
      */
-    protected function mockWebApplication(string $appClass = '\yii\console\Application')
+    protected function mockWebApplication(string $appClass = '\yii\web\Application'): void
     {
         // for update self::$params
         $this->getParam('id');
 
-        /** @var \yii\console\Application $app */
+        /** @var \yii\web\Application $app */
         new $appClass(self::$params);
     }
 
@@ -45,7 +60,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param mixed $default default value to use when param is not set.
      * @return mixed the value of the configuration param
      */
-    public function getParam(string $name, $default = null)
+    public function getParam(string $name, mixed $default = null): mixed
     {
         if (self::$params === null) {
             self::$params = require(__DIR__ . '/config/main.php');
@@ -61,8 +76,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Destroys application in Yii::$app by setting it to null.
      */
-    protected function destroyWebApplication()
+    protected function destroyWebApplication(): void
     {
-        \Yii::$app = null;
+        Yii::$app = null;
     }
 }

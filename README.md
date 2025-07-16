@@ -1,43 +1,21 @@
-Yii 2 [Font Awesome](http://fortawesome.github.io/Font-Awesome/) Asset Bundle
-===============================
+Yii 2 [Font Awesome](https://fontawesome.com/) Asset Bundle
+======================================
 
-This extension provides a assets bundle with [Font Awesome](https://fontawesome.com/)
-for [Yii framework 2.0](http://www.yiiframework.com/) applications and helper to use icons.
+This fork of [@rmrevin](https://github.com/rmrevin)'s great [extension](https://github.com/rmrevin/yii2-fontawesome) 
+provides a server side rendering implementation of [Font Awesome](https://fontawesome.com/) icons for
+[Yii framework 2.0](http://www.yiiframework.com/) applications and helpers to use the icons.
 
-For license information check the [LICENSE](https://github.com/rmrevin/yii2-fontawesome/blob/master/LICENSE)-file.
+For license information check the [LICENSE](https://github.com/simialbi/yii2-fontawesome/blob/master/LICENSE)-file.
 
-[![License](https://poser.pugx.org/simialbi/yii2-fontawesome/license.svg)](https://packagist.org/packages/rmrevin/yii2-fontawesome)
-[![Latest Stable Version](https://poser.pugx.org/simialbi/yii2-fontawesome/v/stable.svg)](https://packagist.org/packages/rmrevin/yii2-fontawesome)
-[![Latest Unstable Version](https://poser.pugx.org/simialbi/yii2-fontawesome/v/unstable.svg)](https://packagist.org/packages/rmrevin/yii2-fontawesome)
-[![Total Downloads](https://poser.pugx.org/simialbi/yii2-fontawesome/downloads.svg)](https://packagist.org/packages/rmrevin/yii2-fontawesome)
+[![License](https://poser.pugx.org/simialbi/yii2-fontawesome/license.svg)](https://packagist.org/packages/simialbi/yii2-fontawesome)
+[![Latest Stable Version](https://poser.pugx.org/simialbi/yii2-fontawesome/v/stable.svg)](https://packagist.org/packages/simialbi/yii2-fontawesome)
+[![Latest Unstable Version](https://poser.pugx.org/simialbi/yii2-fontawesome/v/unstable.svg)](https://packagist.org/packages/simialbi/yii2-fontawesome)
+[![Total Downloads](https://poser.pugx.org/simialbi/yii2-fontawesome/downloads.svg)](https://packagist.org/packages/simialbi/yii2-fontawesome)
 [![Build Status](https://github.com/simialbi/yii2-fontawesome/actions/workflows/build.yml/badge.svg)](https://github.com/simialbi/yii2-fontawesome/actions/workflows/build.yml)
 
 Support
 -------
-* [GutHub issues](https://github.com/rmrevin/yii2-fontawesome/issues)
-* [Public chat](https://gitter.im/rmrevin/support)
-
-Fontawesome version
--------------------
-| Version of font-awesome | Version of extension |
-|------------------------:|:---------------------|
-|                     4.* | ~2.17                |
-|                     5.* | ~3.0                 |
-
-Update to `3.2`
----------------
-
-Be careful in version 3.2 `rmrevin\yii\fontawesome\AssetBundle` package use cdn by default. More in the [changelog](https://github.com/rmrevin/yii2-fontawesome/blob/master/CHANGELOG.md).
-
-Update to `3.0`
----------------
-
-Be careful in version 3.0 deprecated methods were removed. More in the [changelog](https://github.com/rmrevin/yii2-fontawesome/blob/master/CHANGELOG.md).
-
-Update to `2.17`
-----------------
-
-Be careful in version 2.17 deprecated methods were removed. More in the [changelog](https://github.com/rmrevin/yii2-fontawesome/blob/2.x/CHANGELOG.md).
+* [GitHub issues](https://github.com/simialbi/yii2-fontawesome/issues)
 
 Installation
 ------------
@@ -47,284 +25,176 @@ The preferred way to install this extension is through [composer](https://getcom
 Either run
 
 ```bash
-composer require "rmrevin/yii2-fontawesome:~3.4"
+composer require "simialbi/yii2-fontawesome:^4.0.0"
 ```
 
 or add
 
 ```
-"rmrevin/yii2-fontawesome": "~3.4",
+"rmrevin/yii2-fontawesome": "^4.0.0",
 ```
 
 to the `require` section of your `composer.json` file.
 
+How it looks rendered
+---------------------
+By using this extension, you prevent loading the huge js files of fontawesome and still have all the power features
+like `masking`, `power transforms`, `animations` and so on. This library moved the logic and metadata to the server to 
+keep the rendering and asset output as small as possible.
+
+An example of what the rendered output looks like on a simple page is as follows: 
+```php
+<?php
+// usage 
+
+use rmrevin\yii\fontawesome\FAS;
+use yii\helpers\Html;
+
+/* @var $this \yii\web\View */
+/* @var $content string */
+
+$this->beginPage();
+?>
+    <!DOCTYPE html>
+    <html lang="<?= Yii::$app->language; ?>">
+    <head>
+        <meta charset="utf-8">
+        <meta lang="<?= Yii::$app->language; ?>">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="none"/>
+        <?= Html::csrfMetaTags(); ?>
+        <title><?= Html::encode($this->title); ?></title>
+        <?php $this->head(); ?>
+    </head>
+    <body>
+    <?php $this->beginBody(); ?>
+    <?= FAS::i('cog'); ?>
+    <?= FAS::i('user'); ?>
+    <?= FAS::i('cog', ['class' => ['test']])->fixedWidth(); ?>
+    <?= $content; ?>
+    <?php $this->endBody(); ?>
+    </body>
+    </html>
+<?php $this->endPage(); ?>
+?>
+```
+
+```html
+<!-- output -->
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta lang="en-US">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="none"/>
+    <title>My test page</title>
+    <link href="/assets/93d4929e/css/svg-with-js.css" rel="stylesheet">
+</head>
+<body>
+<svg class="svg-inline--fa fa-cog" aria-hidden="true" focusable="false" role="img" data-prefix="fas" data-icon="cog" viewBox="0 0 512 512"><use href="#fas--cog" /></svg>
+<svg class="svg-inline--fa fa-user" aria-hidden="true" focusable="false" role="img" data-prefix="fas" data-icon="user" viewBox="0 0 512 512"><use href="#fas--user" /></svg>
+<svg class="svg-inline--fa fa-cog test fa-fw" aria-hidden="true" focusable="false" role="img" data-prefix="fas" data-icon="cog" viewBox="0 0 512 512"><use href="#fas--cog" /></svg>
+This is my test content
+
+<svg style="display: none;">
+    <symbol id="fas--cog"><path fill="currentColor" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></symbol>
+    <symbol id="fas--user"><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"></path></symbol>
+</svg>
+</body>
+</html>
+```
+
+As you can see, an additional advantage of server side rendering is if you use the same icon multiple times (even with
+different style and transformation settings), it's just rendered once and referenced multiple times.
+
+
 Usage with fa pro version
 -------------------------
+If you have a pro version of fontawesome, download your bundle, extract it and place the `icon-families.json` file
+located in `metadata directorty` to a newly created directory `fontawesome-pro` in the root directory of this repository.
+Afterward call the `generate-classes.php` file in the `bin` directory:
 
-### CDN
-Register your domain here - https://fontawesome.com/how-to-use/on-the-web/setup/getting-started
-
-Add `CdnProAssetBundle` as depends of your app asset bundle:
-```php
-class AppAsset extends AssetBundle
-{
-	// ...
-
-	public $depends = [
-		// ...
-		'rmrevin\yii\fontawesome\CdnProAssetBundle'
-	];
-}
-
-```
-
-Or inject `CdnProAssetBundle` in your view:
-
-```php
-rmrevin\yii\fontawesome\CdnProAssetBundle::register($this);
-```
-
-### NPM
-Install npm package of font:
-```
-npm install @fortawesome/fontawesome-pro
-```
-or 
-```
-yarn add @fortawesome/fontawesome-pro
-```
-
-And add `NpmProAssetBundle` as depends of your app asset bundle:
-```php
-class AppAsset extends AssetBundle
-{
-	// ...
-
-	public $depends = [
-		// ...
-		'rmrevin\yii\fontawesome\NpmProAssetBundle'
-	];
-}
-
-```
-
-Or inject `NpmProAssetBundle` in your view:
-
-```php
-rmrevin\yii\fontawesome\NpmProAssetBundle::register($this);
-```
-
-### Optional
-
-In order for do not install the free version of the font-awesome package, you can add it to the `replace` section of `composer.json`.
-
-```
-  "replace": {
-    "fortawesome/font-awesome": "*"
-  },
+```bash
+php -f ./bin/generate-classes.php
 ```
 
 Usage with fa free version
--------------------------
+--------------------------
+Just call the `generate-classes.php` file in the `bin` directory:
 
-### CDN
-Add `CdnFreeAssetBundle` as depends of your app asset bundle:
-```php
-class AppAsset extends AssetBundle
-{
-	// ...
-
-	public $depends = [
-		// ...
-		'rmrevin\yii\fontawesome\CdnFreeAssetBundle'
-	];
-}
-
+```bash
+php -f ./bin/generate-classes.php
 ```
 
-Or inject `CdnFreeAssetBundle` in your view:
+⚠️ Differences to original repository
+-------------------------------------
+1. You don't have to register the asset bundle yourself
+2. Animations are styles are applied via methods instead of classes
+3. `Stack` class is deprecated
+4. There is a `Layer` class replacing the stack (https://docs.fontawesome.com/web/style/layer)
+5. There are no `duotone` or `sharp` classes anymore (handled via method `->duotone()` and/or `->sharp()`)
+6. There are no `ul` and `li` methods anymore (too easy to do yourself) 
+
+Usage examples
+--------------
 
 ```php
-rmrevin\yii\fontawesome\CdnFreeAssetBundle::register($this);
-```
-
-# Composer
-
-Free version of package `fortawesome/font-awesome` already installed in vendor.
-
-Add `NpmFreeAssetBundle` as depends of your app asset bundle:
-```php
-class AppAsset extends AssetBundle
-{
-	// ...
-
-	public $depends = [
-		// ...
-		'rmrevin\yii\fontawesome\NpmFreeAssetBundle'
-	];
-}
-
-```
-
-Or inject `NpmFreeAssetBundle` in your view:
-
-```php
-rmrevin\yii\fontawesome\NpmFreeAssetBundle::register($this);
-```
-
-Class reference
----------------
-
-Namespace: `rmrevin\yii\fontawesome`;
-
-### Class `FAB`, `FAL`, `FAR`, `FAS` or `FontAwesome`
-
-* `static FAR::icon($name, $options=[])` - Creates an [`component\Icon`](#class-componenticon) that can be used to FontAwesome html icon
-  * `$name` - name of icon in font awesome set.
-  * `$options` - additional attributes for `i.fa` html tag.
-* `static FAR::stack($name, $options=[])` - Creates an [`component\Stack`](#class-componentstack) that can be used to FontAwesome html icon
-  * `$options` - additional attributes for `span.fa-stack` html tag.
-
-### Class `component\Icon`
-
-* `(string)$Icon` - render icon
-* `$Icon->addCssClass($value)` - add to html tag css class in `$value`
-  * `$value` - name of css class
-* `$Icon->inverse()` - add to html tag css class `fa-inverse`
-* `$Icon->spin()` - add to html tag css class `fa-spin`
-* `$Icon->fixedWidth()` - add to html tag css class `fa-fw`
-* `$Icon->ul()` - add to html tag css class `fa-ul`
-* `$Icon->li()` - add to html tag css class `fa-li`
-* `$Icon->border()` - add to html tag css class `fa-border`
-* `$Icon->pullLeft()` - add to html tag css class `pull-left`
-* `$Icon->pullRight()` - add to html tag css class `pull-right`
-* `$Icon->size($value)` - add to html tag css class with size
-  * `$value` - size value (variants: `FA::SIZE_LARGE`, `FA::SIZE_2X`, `FA::SIZE_3X`, `FA::SIZE_4X`, `FA::SIZE_5X`)
-* `$Icon->rotate($value)` - add to html tag css class with rotate
-  * `$value` - rotate value (variants: `FA::ROTATE_90`, `FA::ROTATE_180`, `FA::ROTATE_270`)
-* `$Icon->flip($value)` - add to html tag css class with rotate
-  * `$value` - flip value (variants: `FA::FLIP_HORIZONTAL`, `FA::FLIP_VERTICAL`)
-
-### Class `component\Stack`
-
-* `(string)$Stack` - render icon stack
-* `$Stack->icon($icon, $options=[])` - set icon for stack
-  * `$icon` - name of icon or `component\Icon` object
-  * `$options` - additional attributes for icon html tag.
-* `$Stack->icon($icon, $options=[])` - set background icon for stack
-  * `$icon` - name of icon or `component\Icon` object
-  * `$options` - additional attributes for icon html tag.
-
-Helper examples
----------------
-
-```php
+<?php
 use rmrevin\yii\fontawesome\FAS;
+// or
+// use rmrevin\yii\fontawesome\FAB;
 // or (only in pro version https://fontawesome.com/pro)
 // use rmrevin\yii\fontawesome\FAR;
 // use rmrevin\yii\fontawesome\FAL;
-// use rmrevin\yii\fontawesome\FAB;
+// use rmrevin\yii\fontawesome\FAT;
+// use rmrevin\yii\fontawesome\FAK;
+
 
 // normal use
-echo FAS::icon('home'); // <i class="fas fa-home"></i>
-
-// shortcut
-echo FAS::i('home'); // <i class="fas fa-home"></i>
+echo FAS::icon('home');
 
 // icon with additional attributes
 echo FAS::icon(
     'arrow-left', 
     ['class' => 'big', 'data-role' => 'arrow']
-); // <i class="big fas fa-arrow-left" data-role="arrow"></i>
+);
 
 // icon in button
 echo Html::submitButton(
     Yii::t('app', '{icon} Save', ['icon' => FAS::icon('check')])
-); // <button type="submit"><i class="fas fa-check"></i> Save</button>
+);
 
 // icon with additional methods
-echo FAS::icon('cog')->inverse();    // <i class="fas fa-cog fa-inverse"></i>
-echo FAS::icon('cog')->spin();       // <i class="fas fa-cog fa-spin"></i>
-echo FAS::icon('cog')->fixedWidth(); // <i class="fas fa-cog fa-fw"></i>
-echo FAS::icon('cog')->li();         // <i class="fas fa-cog fa-li"></i>
-echo FAS::icon('cog')->border();     // <i class="fas fa-cog fa-border"></i>
-echo FAS::icon('cog')->pullLeft();   // <i class="fas fa-cog pull-left"></i>
-echo FAS::icon('cog')->pullRight();  // <i class="fas fa-cog pull-right"></i>
+echo FAS::icon('cog')->sharp(); // (only in pro version https://fontawesome.com/pro)
+echo FAS::icon('cog')->duotone(); // (only in pro version https://fontawesome.com/pro)
+echo FAS::icon('cog')->inverse(); // only useful in mask or layer usage
+echo FAS::icon('cog')->spin(); 
+echo FAS::icon('cog')->pulse();
+echo FAS::icon('cog')->reverse(); // only useful with spin or pulse
+echo FAS::icon('cog')->beat();
+echo FAS::icon('cog')->shake();
+echo FAS::icon('cog')->bounce();
+echo FAS::icon('cog')->fixedWidth(); // or ->fw()
+echo FAS::icon('cog')->border();
+echo FAS::icon('cog')->pullLeft();
+echo FAS::icon('cog')->pullRight();
+echo FAS::icon('cog')->flip('horizontal'); // or 'vertical' or 'both'
+echo FAS::icon('cog')->size(FAS::SIZE_LARGE); // see FontAwesome::SIZE_ constants for possible values
+echo FAS::icon('cog')->transform([
+    FAS::TRANSFORM_GROW => 2,
+    FAS::TRANSFORM_UP => 5,
+    FAS::TRANSFORM_RIGHT => 3
+]); // see FontAwesome::TRANSFORM_ constants for possible values
+echo FAS::icon('cog')->mask(FAS::i('circle'))->transform(['shrink' => 8]);
 
-// icon size
-echo FAS::icon('cog')->size(FAS::SIZE_3X);
-// values: FAS::SIZE_LARGE, FAS::SIZE_2X, FAS::SIZE_3X, FAS::SIZE_4X, FAS::SIZE_5X
-// <i class="fas fa-cog fa-size-3x"></i>
-
-// icon rotate
-echo FAS::icon('cog')->rotate(FAS::ROTATE_90); 
-// values: FAS::ROTATE_90, FAS::ROTATE_180, FAS::ROTATE_180
-// <i class="fas fa-cog fa-rotate-90"></i>
-
-// icon flip
-echo FAS::icon('cog')->flip(FAS::FLIP_VERTICAL); 
-// values: FAS::FLIP_HORIZONTAL, FAS::FLIP_VERTICAL
-// <i class="fas fa-cog fa-flip-vertical"></i>
-
-// icon with multiple methods
-echo FAS::icon('cog')
-        ->spin()
-        ->fixedWidth()
-        ->pullLeft()
-        ->size(FAS::SIZE_LARGE);
-// <i class="fas fa-cog fa-spin fa-fw pull-left fa-size-lg"></i>
-
-// icons stack
-echo FAS::stack()
-        ->icon('twitter')
-        ->on('square-o');
-// <span class="fa-stack">
-//   <i class="fas fa-square-o fa-stack-2x"></i>
-//   <i class="fas fa-twitter fa-stack-1x"></i>
-// </span>
-
-// icons stack with additional attributes
-echo FAS::stack(['data-role' => 'stacked-icon'])
-     ->on(FAS::Icon('square')->inverse())
-     ->icon(FAS::Icon('cog')->spin());
-// <span class="fa-stack" data-role="stacked-icon">
-//   <i class="fas fa-square-o fa-inverse fa-stack-2x"></i>
-//   <i class="fas fa-cog fa-spin fa-stack-1x"></i>
-// </span>
-
-// Stacking text and icons
-echo FAS::stack()
-     ->on(FAS::Icon('square'))
-     ->text('1');
-// <span class="fa-stack">
-//   <i class="fas fa-square fa-stack-2x"></i>
-//   <span class="fa-stack-1x">1</span>
-// </span>
-
-// Stacking text and icons with options
-echo FAS::stack()
-     ->on(FAS::Icon('square'))
-     ->text('1', ['tag'=>'strong', 'class'=>'stacked-text']);
-// <span class="fa-stack">
-//   <i class="fas fa-square fa-stack-2x"></i>
-//   <strong class="stacked-text fa-stack-1x">1</strong>
-// </span>
-// Now you can add some css for vertical text positioning:
-.stacked-text { margin-top: .3em; }
-
-// unordered list icons 
-echo FAS::ul(['data-role' => 'unordered-list'])
-     ->item('Bullet item', ['icon' => 'circle'])
-     ->item('Checked item', ['icon' => 'check']);
-// <ul class="fa-ul" data-role="unordered-list">
-//   <li><i class="fas fa-circle fa-li"></i>Bullet item</li>
-//   <li><i class="fas fa-check fa-li"></i>Checked Item</li>
-// </span>
-
-// autocomplete icons name in IDE
-echo FAS::icon(FAS::_COG);
-echo FAS::icon(FAS::_DESKTOP);
-echo FAS::stack()
-     ->on(FAS::_CIRCLE_O)
-     ->icon(FAS::_TWITTER);
+//layering icons
+echo FAS::layer()
+    ->icon(FAS::icon('cog'))
+    ->icon(FAS::icon('arrow-up-right-from-square')->transform([
+        FAS::TRANSFORM_UP => 8,
+        FAS::TRANSFORM_RIGHT => 12,
+        FAS::TRANSFORM_SHRINK => 5        
+    ]));
+?>
 ```

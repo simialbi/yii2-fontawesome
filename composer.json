@@ -32,7 +32,7 @@
         "yiisoft/yii2": "^2.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.21",
+        "phpunit/phpunit": "^11.5.20",
         "yiisoft/yii2-coding-standards": "~2.0"
     },
     "suggest": {

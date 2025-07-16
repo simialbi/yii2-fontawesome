@@ -140,7 +140,7 @@ abstract class FontAwesome
      *
      * @return component\Stack
      * @see stack()
-     *
+     * @deprecated Use layer instead
      */
     public static function s(array $options = []): component\Stack
     {
@@ -153,6 +153,7 @@ abstract class FontAwesome
      * @param array $options
      *
      * @return component\Stack
+     * @deprecated Use layer instead
      */
     public static function stack(array $options = []): component\Stack
     {
@@ -161,11 +162,27 @@ abstract class FontAwesome
         ]);
     }
 
+    /**
+     * Shortcut for `layer()` method
+     *
+     * @param array $options
+     *
+     * @return component\Layer
+     * @see layer()
+     */
     public static function l(array $options = []): component\Layer
     {
         return self::layer($options);
     }
 
+    /**
+     * Creates and returns a Layer object based on the provided options.
+     *
+     * @param array $options An optional associative array of configuration options
+     *                        used to customize the creation of the Layer object.
+     *
+     * @return component\Layer An instance of the Layer object configured according to the provided options.
+     */
     public static function layer(array $options = []): component\Layer
     {
         return new component\Layer(['options' => $options]);

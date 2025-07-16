@@ -13,10 +13,15 @@ return [
         '@web' => '/',
         '@webroot' => $baseDir . '/runtime',
         '@vendor' => realpath($baseDir . '/../vendor'),
-        '@bower' => realpath($baseDir . '/../vendor/bower'),
+        '@bower' => realpath($baseDir . '/../vendor/bower-asset'),
     ],
     'components' => [
-        'cache'        => [
+        'request' => [
+            'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
+            'scriptFile' => $baseDir . '/runtime/index.php',
+            'scriptUrl' => '/index.php'
+        ],
+        'cache' => [
             'class' => 'yii\caching\DummyCache'
         ]
     ]

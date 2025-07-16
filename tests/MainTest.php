@@ -7,11 +7,8 @@
 
 namespace yiiunit\extensions\fontawesome;
 
-use rmrevin\yii\fontawesome\component\Icon;
-use rmrevin\yii\fontawesome\FAD;
 use rmrevin\yii\fontawesome\FAR;
 use rmrevin\yii\fontawesome\FAS;
-use rmrevin\yii\fontawesome\FontAwesome;
 use Yii;
 
 /**
@@ -20,68 +17,81 @@ use Yii;
  */
 class MainTest extends TestCase
 {
-
-    public function testMain()
+    public function testMain(): void
     {
-        Icon::$counter = 0;
         $this->assertInstanceOf('rmrevin\yii\fontawesome\FAR', new FAR());
         $this->assertInstanceOf('rmrevin\yii\fontawesome\FontAwesome', new FAR());
-
-        $this->assertInstanceOf('rmrevin\yii\fontawesome\FontAwesome', new FontAwesome());
 
         $Icon = FAR::icon('cog');
         $this->assertInstanceOf('rmrevin\yii\fontawesome\component\Icon', $Icon);
 
         $Stack = FAR::stack();
         $this->assertInstanceOf('rmrevin\yii\fontawesome\component\Stack', $Stack);
+
+        $Layer = FAR::layer();
+        $this->assertInstanceOf('rmrevin\yii\fontawesome\component\Layer', $Layer);
     }
 
-    public function testIconOutput()
+    public function testNormalIconOutput(): void
     {
-        Icon::$counter = 0;
-
-        $expected = '<svg id="fa0" class="svg-inline--fa fa-cog fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="cog" data-fa-i2svg="" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4.6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"></path></svg>';
+        $expected = '<svg class="svg-inline--fa fa-cog" aria-hidden="true" focusable="false" role="img" data-prefix="fas" data-icon="cog" viewBox="0 0 512 512"><use href="#fas--cog" /></svg>';
         $this->assertEquals($expected, (string)FAS::i('cog'));
+
+        $content = Yii::$app->view->render('//simple.php');
+        $this->assertStringContainsString(
+            '<symbol id="fas--cog"><path fill="currentColor" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></symbol>',
+            $content
+        );
     }
 
-    public function testDuotoneIconOutput()
+    public function testPathRenderingIconOutput(): void
     {
-        $dir = Yii::getAlias('@vendor/fortawesome/font-awesome-pro');
-        if (!is_dir($dir)) {
-            $this->markTestSkipped('Font awesome pro not present');
+        $expected = '<svg class="svg-inline--fa fa-cog" aria-hidden="true" focusable="false" role="img" data-prefix="fas" data-icon="cog" viewBox="0 0 512 512"><path fill="currentColor" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>';
+        $this->assertEquals($expected, (string)FAS::i('cog')->setPreventUse());
+    }
+
+    public function testDuotoneNormalIconOutput(): void
+    {
+        $file = dirname(__DIR__) . '/fontawesome-pro/icon-families.json';
+        if (!file_exists($file)) {
+            $this->markTestSkipped('Font Awesome Pro is not available');
         }
-        Icon::$counter = 0;
 
-        $expected = '<svg id="fa0" class="svg-inline--fa fa-basketball-ball fa-w-16" aria-hidden="true" data-prefix="fad" data-icon="basketball-ball" data-fa-i2svg="" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g class="fa-group"><path class="fa-secondary" fill="currentColor" d="M224 10.05A247 247 0 0 0 92.33 69.7l79.89 79.89A212.39 212.39 0 0 0 224 10.05zm-29.11 162.21L256 233.37 419.67 69.7A247 247 0 0 0 256 8v2a244.16 244.16 0 0 1-61.11 162.26zM288 502a247 247 0 0 0 131.67-59.7l-79.89-79.89A212.39 212.39 0 0 0 288 502zM442.3 92.33L278.63 256l61.11 61.11A244.16 244.16 0 0 1 502 256h2a247 247 0 0 0-61.7-163.67zm0 327.34A247 247 0 0 0 502 288a212.39 212.39 0 0 0-139.54 51.78zm-125.19-79.93L256 278.63 92.33 442.3A247 247 0 0 0 256 504v-2a244.16 244.16 0 0 1 61.11-162.26zM69.7 92.33A247 247 0 0 0 10.05 224a212.39 212.39 0 0 0 139.54-51.78zm102.56 102.56A244.16 244.16 0 0 1 10 256H8a247 247 0 0 0 61.7 163.67L233.37 256z"></path><path class="fa-primary" fill="currentColor" d="M288 502a249.94 249.94 0 0 1-32 2v-2a244.16 244.16 0 0 1 61.11-162.26L256 278.63 92.33 442.3a249.14 249.14 0 0 1-22.63-22.63L233.37 256l-61.11-61.11A244.16 244.16 0 0 1 10 256H8a249.94 249.94 0 0 1 2.05-32 212.39 212.39 0 0 0 139.54-51.78L69.7 92.33A249.14 249.14 0 0 1 92.33 69.7l79.89 79.89A212.39 212.39 0 0 0 224 10.05 249.94 249.94 0 0 1 256 8v2a244.16 244.16 0 0 1-61.11 162.26L256 233.37 419.67 69.7a249.14 249.14 0 0 1 22.63 22.63L278.63 256l61.11 61.11A244.16 244.16 0 0 1 502 256h2a249.94 249.94 0 0 1-2 32 212.39 212.39 0 0 0-139.54 51.78l79.89 79.89a249.14 249.14 0 0 1-22.63 22.63l-79.89-79.89A212.39 212.39 0 0 0 288 502z"></path></g></svg>';
-        $this->assertEquals($expected, (string)FAD::i('basketball-ball'));
+        $expected = '<svg class="svg-inline--fa fa-basketball" aria-hidden="true" focusable="false" role="img" data-prefix="fas" data-icon="basketball" viewBox="0 0 512 512"><use href="#fas-d--basketball" /></svg>';
+        $this->assertEquals($expected, (string)FAS::i('basketball')->duotone());
+
+        $content = Yii::$app->view->render('//simple.php');
+        $this->assertStringContainsString(
+            '<symbol id="fas-d--basketball"><path class="fa-secondary" opacity=".4" d="M0 256c0 64.9 24.2 124.2 64 169.4C120.5 368.9 176.9 312.4 233.4 256c-20.5-20.5-40.9-40.9-61.4-61.4C138.5 222.9 95.3 240 48 240c-16.2 0-32-2-47.1-5.8C.3 241.4 0 248.7 0 256zm5.6-53.7C19.1 206 33.3 208 48 208c38.4 0 73.7-13.5 101.3-36.1C120.8 143.5 92.4 115.1 64 86.6C35.5 119 15 158.6 5.6 202.3zM86.6 64c28.4 28.4 56.8 56.8 85.2 85.2C194.5 121.7 208 86.4 208 48c0-14.7-2-28.9-5.7-42.4C158.6 15 119 35.5 86.6 64zm0 384c45.1 39.8 104.4 64 169.4 64c7.3 0 14.6-.3 21.8-.9c-.5-1.9-.9-3.8-1.3-5.7s-.8-3.8-1.2-5.7c-.7-3.9-1.3-7.8-1.8-11.7c-.3-2-.5-4-.6-6c-.2-2-.3-3.9-.5-5.9c-.1-2.1-.2-4.1-.3-6.1c-.1-2-.1-3.9-.1-6c0-1.7 0-3 0-4.4c0-1.6 .1-2.9 .1-4.3c.1-3.1 .3-6 .6-8.9c.5-5.8 1.3-11.5 2.3-17.1c2-11.2 5.1-22.1 9-32.6c7.8-20.9 19.2-40.1 33.3-56.8c-20.5-20.5-40.9-40.9-61.4-61.4C199.5 335.1 143.1 391.5 86.6 448zm108-276c20.5 20.5 40.9 40.9 61.4 61.4C312.5 176.9 368.9 120.5 425.4 64C380.2 24.2 320.9 0 256 0c-7.3 0-14.6 .3-21.8 .9C238 16 240 31.8 240 48c0 47.3-17.1 90.5-45.4 124zm84 84c20.5 20.5 40.9 40.9 61.4 61.4c33.5-28.3 76.7-45.4 124-45.4c16.2 0 32 2 47.1 5.8c.6-7.2 .9-14.5 .9-21.8c0-64.9-24.2-124.2-64-169.4C391.5 143.1 335.1 199.6 278.6 256zm25.5 200.7c-.1 2.4-.2 4.8-.2 7.3c0 1.9 0 3.7 .1 5.5c.1 1.8 .2 3.6 .3 5.4c.2 3.6 .6 7.2 1.1 10.7c1 7.1 2.4 14 4.2 20.7C353.4 497 393 476.5 425.4 448l-85.2-85.2c-11.3 13.8-20.3 29.5-26.5 46.6c-3.1 8.5-5.5 17.4-7.1 26.5c-.8 4.6-1.4 9.2-1.8 13.9c-.2 2.3-.4 4.7-.5 7zm58.6-116.6L448 425.4c28.5-32.3 49.1-71.9 58.4-115.7C492.9 306 478.7 304 464 304c-38.4 0-73.7 13.5-101.3 36.1z" /><path class="fa-primary" d="M86.6 64l85.2 85.2C194.5 121.7 208 86.4 208 48c0-14.7-2-28.9-5.7-42.4c10.4-2.2 21-3.8 31.9-4.7C238 16 240 31.8 240 48c0 47.3-17.1 90.5-45.4 124L256 233.4 425.4 64c8 7.1 15.6 14.6 22.6 22.6L278.6 256 340 317.4c33.5-28.3 76.7-45.4 124-45.4c16.2 0 32 2 47.1 5.8c-.9 10.8-2.5 21.5-4.7 31.9C492.9 306 478.7 304 464 304c-38.4 0-73.7 13.5-101.3 36.1L448 425.4c-7.1 8-14.6 15.6-22.6 22.6l-85.2-85.2C317.5 390.3 304 425.6 304 464c0 14.7 2 28.9 5.7 42.4c-10.4 2.2-21 3.8-31.9 4.7C274 496 272 480.2 272 464c0-47.3 17.1-90.5 45.4-124L256 278.6 86.6 448c-8-7.1-15.6-14.6-22.6-22.6L233.4 256 172 194.6C138.5 222.9 95.3 240 48 240c-16.2 0-32-2-47.1-5.8c.9-10.8 2.5-21.5 4.7-31.9C19.1 206 33.3 208 48 208c38.4 0 73.7-13.5 101.3-36.1L64 86.6c7.1-8 14.6-15.6 22.6-22.6z" /></symbol>',
+            $content
+        );
     }
 
-    public function testDoubleRenderIcon()
+    public function testDuotonePathRenderingIconOutput(): void
     {
-        Icon::$counter = 0;
-
-        $expected = '<svg id="fa0" class="svg-inline--fa fa-user fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="user" data-fa-i2svg="" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>';
-        $this->assertEquals($expected, (string)FAS::i('user'));
-
-        $expected = '<svg id="fa0" class="svg-inline--fa fa-user fa-w-14 test" aria-hidden="true" data-prefix="fas" data-icon="user" data-fa-i2svg="" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>';
-        $this->assertEquals($expected, (string)FAS::i('user', ['class' => 'test']));
+        $file = dirname(__DIR__) . '/fontawesome-pro/icon-families.json';
+        if (!file_exists($file)) {
+            $this->markTestSkipped('Font Awesome Pro is not available');
+        }
+        $expected = '<svg class="svg-inline--fa fa-basketball" aria-hidden="true" focusable="false" role="img" data-prefix="fas" data-icon="basketball" viewBox="0 0 512 512"><path class="fa-secondary" opacity=".4" d="M0 256c0 64.9 24.2 124.2 64 169.4C120.5 368.9 176.9 312.4 233.4 256c-20.5-20.5-40.9-40.9-61.4-61.4C138.5 222.9 95.3 240 48 240c-16.2 0-32-2-47.1-5.8C.3 241.4 0 248.7 0 256zm5.6-53.7C19.1 206 33.3 208 48 208c38.4 0 73.7-13.5 101.3-36.1C120.8 143.5 92.4 115.1 64 86.6C35.5 119 15 158.6 5.6 202.3zM86.6 64c28.4 28.4 56.8 56.8 85.2 85.2C194.5 121.7 208 86.4 208 48c0-14.7-2-28.9-5.7-42.4C158.6 15 119 35.5 86.6 64zm0 384c45.1 39.8 104.4 64 169.4 64c7.3 0 14.6-.3 21.8-.9c-.5-1.9-.9-3.8-1.3-5.7s-.8-3.8-1.2-5.7c-.7-3.9-1.3-7.8-1.8-11.7c-.3-2-.5-4-.6-6c-.2-2-.3-3.9-.5-5.9c-.1-2.1-.2-4.1-.3-6.1c-.1-2-.1-3.9-.1-6c0-1.7 0-3 0-4.4c0-1.6 .1-2.9 .1-4.3c.1-3.1 .3-6 .6-8.9c.5-5.8 1.3-11.5 2.3-17.1c2-11.2 5.1-22.1 9-32.6c7.8-20.9 19.2-40.1 33.3-56.8c-20.5-20.5-40.9-40.9-61.4-61.4C199.5 335.1 143.1 391.5 86.6 448zm108-276c20.5 20.5 40.9 40.9 61.4 61.4C312.5 176.9 368.9 120.5 425.4 64C380.2 24.2 320.9 0 256 0c-7.3 0-14.6 .3-21.8 .9C238 16 240 31.8 240 48c0 47.3-17.1 90.5-45.4 124zm84 84c20.5 20.5 40.9 40.9 61.4 61.4c33.5-28.3 76.7-45.4 124-45.4c16.2 0 32 2 47.1 5.8c.6-7.2 .9-14.5 .9-21.8c0-64.9-24.2-124.2-64-169.4C391.5 143.1 335.1 199.6 278.6 256zm25.5 200.7c-.1 2.4-.2 4.8-.2 7.3c0 1.9 0 3.7 .1 5.5c.1 1.8 .2 3.6 .3 5.4c.2 3.6 .6 7.2 1.1 10.7c1 7.1 2.4 14 4.2 20.7C353.4 497 393 476.5 425.4 448l-85.2-85.2c-11.3 13.8-20.3 29.5-26.5 46.6c-3.1 8.5-5.5 17.4-7.1 26.5c-.8 4.6-1.4 9.2-1.8 13.9c-.2 2.3-.4 4.7-.5 7zm58.6-116.6L448 425.4c28.5-32.3 49.1-71.9 58.4-115.7C492.9 306 478.7 304 464 304c-38.4 0-73.7 13.5-101.3 36.1z" /><path class="fa-primary" d="M86.6 64l85.2 85.2C194.5 121.7 208 86.4 208 48c0-14.7-2-28.9-5.7-42.4c10.4-2.2 21-3.8 31.9-4.7C238 16 240 31.8 240 48c0 47.3-17.1 90.5-45.4 124L256 233.4 425.4 64c8 7.1 15.6 14.6 22.6 22.6L278.6 256 340 317.4c33.5-28.3 76.7-45.4 124-45.4c16.2 0 32 2 47.1 5.8c-.9 10.8-2.5 21.5-4.7 31.9C492.9 306 478.7 304 464 304c-38.4 0-73.7 13.5-101.3 36.1L448 425.4c-7.1 8-14.6 15.6-22.6 22.6l-85.2-85.2C317.5 390.3 304 425.6 304 464c0 14.7 2 28.9 5.7 42.4c-10.4 2.2-21 3.8-31.9 4.7C274 496 272 480.2 272 464c0-47.3 17.1-90.5 45.4-124L256 278.6 86.6 448c-8-7.1-15.6-14.6-22.6-22.6L233.4 256 172 194.6C138.5 222.9 95.3 240 48 240c-16.2 0-32-2-47.1-5.8c.9-10.8 2.5-21.5 4.7-31.9C19.1 206 33.3 208 48 208c38.4 0 73.7-13.5 101.3-36.1L64 86.6c7.1-8 14.6-15.6 22.6-22.6z" /></svg>';
+        $this->assertEquals($expected, (string)FAS::i('basketball')->duotone()->setPreventUse());
     }
 
     public function testAdvancedIconMaskOutput()
     {
-        Icon::$counter = 0;
-        $this->assertEquals(
-            '<svg id="fa0" class="svg-inline--fa fa-comment fa-w-16 fa-fw" data-fa-mask="fas fa-circle" data-fa-transform="shrink-8" data-prefix="fas" data-icon="comment" data-fa-i2svg="" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><clipPath id="clip-fa0"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></clipPath><mask id="mask-fa0" width="100%" height="100%" x="0" y="0" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse"><rect width="100%" height="100%" x="0" y="0" fill="white"></rect><g transform="translate(256 256)"><g transform="translate(0, 0) scale(0.5, 0.5) rotate(0 0 0)"><path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32z" transform="translate(-256 -256)" fill="black"></path></g></g></mask></defs><rect width="100%" height="100%" fill="currentColor" clip-path="url(#clip-fa0)" mask="url(#mask-fa0)" x="0" y="0"></rect></svg>',
-            (string)FAS::i('comment')->mask('fas fa-circle')->transform('shrink-8')->fixedWidth()
+        $this->assertMatchesRegularExpression(
+            '@<svg class="svg-inline--fa fa-comment fa-fw" aria-hidden="true" focusable="false" role="img" data-prefix="far" data-icon="comment" viewBox="0 0 512 512"><defs><clipPath id="clip-[^"]+"><path fill="currentColor" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z"/></clipPath><mask x="0" y="0" height="100%" width="100%" id="mask-[^"]+" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse"><rect x="0" y="0" width="100%" height="100%" fill="white" /><g transform="translate\(256 256\)"><g transform="translate\(0, 0\) scale\(0\.5, 0\.5\) rotate\(0 0 0\)"><use href="#far--comment" fill="black" transform="translate\(-256 -256\)" /></g></g></mask></defs><rect fill="currentColor" clip-path="url\(#clip-[^"]+\)" mask="url\(#mask-[^"]+\)" x="0" y="0" width="100%" height="100%" /></svg>@',
+            (string)FAR::i('comment')->mask(FAS::i('circle'))->transform(['shrink' => 8])->fixedWidth()
         );
-    }
 
-    public function testStackOutput()
-    {
-        Icon::$counter = 0;
-        $this->assertEquals(
-            '<span class="fa-stack"><svg id="fa1" class="svg-inline--fa fa-circle fa-w-16 fa-stack-2x" aria-hidden="true" data-prefix="fas" data-icon="circle" data-fa-i2svg="" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg><svg id="fa0" class="svg-inline--fa fa-flag fa-w-16 fa-stack-1x fa-inverse" aria-hidden="true" data-prefix="fas" data-icon="flag" data-fa-i2svg="" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M349.565 98.783C295.978 98.783 251.721 64 184.348 64c-24.955 0-47.309 4.384-68.045 12.013a55.947 55.947 0 0 0 3.586-23.562C118.117 24.015 94.806 1.206 66.338.048 34.345-1.254 8 24.296 8 56c0 19.026 9.497 35.825 24 45.945V488c0 13.255 10.745 24 24 24h16c13.255 0 24-10.745 24-24v-94.4c28.311-12.064 63.582-22.122 114.435-22.122 53.588 0 97.844 34.783 165.217 34.783 48.169 0 86.667-16.294 122.505-40.858C506.84 359.452 512 349.571 512 339.045v-243.1c0-23.393-24.269-38.87-45.485-29.016-34.338 15.948-76.454 31.854-116.95 31.854z"></path></svg></span>',
-            (string)FAS::s()->icon('flag')->on('circle')
+        $content = Yii::$app->view->render('//simple.php');
+        $this->assertStringContainsString(
+            '<symbol id="far--comment"><path fill="currentColor" d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9l.3-.5z"/></symbol>',
+            $content
+        );
+        $this->assertStringContainsString(
+            '<symbol id="fas--circle"><path fill="currentColor" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z"/></symbol>',
+            $content
         );
     }
 }
