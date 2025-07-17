@@ -109,9 +109,9 @@ As you can see, an additional advantage of server side rendering is if you use t
 different style and transformation settings), it's just rendered once and referenced multiple times.
 
 
-Usage with fa pro version
--------------------------
-If you have a pro version of fontawesome, download your bundle, extract it and place the `icon-families.json` file
+Usage with FontAwesome pro-version
+----------------------------------
+If you have a pro-version of FontAwesome, download your bundle, extract it and place the `icon-families.json` file
 located in `metadata directorty` to a newly created directory `fontawesome-pro` in the root directory of this repository.
 Afterward call the `generate-classes.php` file in the `bin` directory:
 
@@ -119,8 +119,8 @@ Afterward call the `generate-classes.php` file in the `bin` directory:
 php -f ./bin/generate-classes.php
 ```
 
-Usage with fa free version
---------------------------
+Usage with FontAwesome free-version
+-----------------------------------
 Just call the `generate-classes.php` file in the `bin` directory:
 
 ```bash
@@ -144,8 +144,8 @@ Usage examples
 use rmrevin\yii\fontawesome\FAS;
 // or
 // use rmrevin\yii\fontawesome\FAB;
-// or (only in pro version https://fontawesome.com/pro)
 // use rmrevin\yii\fontawesome\FAR;
+// or (only in pro version https://fontawesome.com/pro)
 // use rmrevin\yii\fontawesome\FAL;
 // use rmrevin\yii\fontawesome\FAT;
 // use rmrevin\yii\fontawesome\FAK;
